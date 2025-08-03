@@ -80,13 +80,19 @@ function vTrait.setSmoke(targ)
             local pr = targ:getPrimaryHandItem()
             local sc =  targ:getSecondaryHandItem()             
             local shouldReduce = (pr and pr:isProtectFromRainWhileEquipped()) or (sc and sc:isProtectFromRainWhileEquipped())
-            if shouldReduce then
-                SunDamage = SunDamage * (UmbrellaDmgReduction / 100)  
-            end
+      
             
             local alpha1 = SandboxVars.vTrait.SmokeOpacity1 or 0.05
             local alpha2 = SandboxVars.vTrait.SmokeOpacity2 or 0.007
+
+            if shouldReduce then
+                local reduction = (UmbrellaDmgReduction / 100)  
+                SunDamage = SunDamage * reduction 
+                alpha1 = alpha1 * reduction 
+                alpha2 = alpha2 * reduction 
+            end
             
+
             local col1 = SandboxVars.vTrait.SmokeColor1
             if col1 ~= 9 then
                 targ:AttachAnim("Smoke", "01", 2, 0.2, 0, 270, true, 0, false, 0, vTrait.getSmokeColor(col1, alpha1))
