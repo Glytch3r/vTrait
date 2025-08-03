@@ -1,0 +1,4 @@
+UI_EN = {
+    UI_trait_V = "V",
+    UI_trait_V_desc = "V",
+}

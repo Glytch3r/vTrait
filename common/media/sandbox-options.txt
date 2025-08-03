@@ -1,0 +1,108 @@
+
+VERSION = 1,
+
+option vTrait.vSpeedMin 
+{
+    type = double, default = 1.04, min = 0.5, max = 5,
+    page = vTrait, translation = vTrait_vSpeedMin,
+}
+
+
+option vTrait.vSpeedMax 
+{
+    type = double, default = 3, min = 0.5, max = 5,
+    page = vTrait, translation = vTrait_vSpeedMax,
+}
+option vTrait.vSpeedBonus 
+{
+    type = double, default = 0.15, min = 0, max = 1,
+    page = vTrait, translation = vTrait_vSpeedBonus,
+}
+option vTrait.vSpeedPeakDebuff 
+{
+    type = double, default = 0.2, min = 0.05, max = 1,
+    page = vTrait, translation = vTrait_vSpeedPeakDebuff,
+}
+option vTrait.isSpeedHungerBonus 
+{
+    type = boolean, default = false,
+    page = vTrait, translation = vTrait_isSpeedHungerBonus,
+}
+
+
+option vTrait.RecoveryPeakDebuff 
+{
+    type = double, default = 0.2, min = 0.05, max = 1,
+    page = vTrait, translation = vTrait_RecoveryPeakDebuff,
+}
+option vTrait.isHealHungerBonus 
+{
+    type = boolean, default = false,
+    page = vTrait, translation = vTrait_isHealHungerBonus,
+}
+option vTrait.RecoverRateMin 
+{
+    type = double, default = 0.005, min = 0, max = 1,
+    page = vTrait, translation = vTrait_RecoverRateMin,
+}
+option vTrait.RecoverRateMax 
+{
+    type = double, default = 0.01, min = 0, max = 1,
+    page = vTrait, translation = vTrait_RecoverRateMax,
+}
+option vTrait.HealthRecoveryRate 
+{
+    type = double, default = 0.004, min = 0, max = 1,
+    page = vTrait, translation = vTrait_HealthRecoveryRate,
+}
+
+option vTrait.HitRecoverChance 
+{
+    type = double, default = 25, min = 0, max = 100,
+    page = vTrait, translation = vTrait_HitRecoverChance,
+}
+option vTrait.HitRecoveryPercent 
+{
+    type = double, default = 30, min = 0, max = 100,
+    page = vTrait, translation = vTrait_HitRecoveryPercent,
+}
+
+
+option vTrait.SunDamage 
+{
+	type = double, default = 0.001,    min = 0,    max = 1,
+	page = vTrait, translation = vTrait_SunDamage,
+}
+option vTrait.SmokeOpacity1
+{
+	type = double, default = 0.05,    min = 0,    max = 1,
+	page = vTrait, translation = vTrait_SmokeOpacity1,
+}
+option vTrait.SmokeColor1
+{
+    type = enum, numValues = 9, default = 1,
+    page = vTrait,
+    translation = vTrait_SmokeColor1,
+    valueTranslation = vTrait_SmokeColor1,
+}
+
+option vTrait.SmokeOpacity2
+{
+	type = double, default = 0.007,    min = 0,    max = 1,
+	page = vTrait, translation = vTrait_SmokeOpacity2,
+}
+
+option vTrait.SmokeColor2
+{
+    type = enum, numValues = 9, default = 2,
+    page = vTrait,
+    translation = vTrait_SmokeColor2,
+    valueTranslation = vTrait_SmokeColor2,
+}
+
+option vTrait.CarProtect 
+{
+    type = boolean, default = true,
+    page = vTrait, translation = vTrait_CarProtect,
+}
+
