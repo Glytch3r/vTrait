@@ -114,11 +114,10 @@ function vTrait.setSmoke(targ)
     end
 end
 
-
 function vTrait.PenaltyHandler()
     local targ = getPlayer()
     if targ and targ:isAlive() and targ:HasTrait("V") then
         vTrait.setSmoke(targ)
     end
 end
-Events.EveryOneMinute.Add(vTrait.PenaltyHandler)
+Events.OnPlayerUpdate.Add(vTrait.PenaltyHandler)
