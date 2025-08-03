@@ -75,6 +75,15 @@ function vTrait.setSmoke(targ)
       
         if not spr or spr:size() <= 0 then
             local SunDamage = SandboxVars.vTrait.SunDamage or 0.001
+
+            local UmbrellaDmgReduction = SandboxVars.vTrait.UmbrellaDmgReduction or 50
+            local pr = targ:getPrimaryHandItem()
+            local sc =  targ:getSecondaryHandItem()             
+            local shouldReduce = (pr and pr:isProtectFromRainWhileEquipped()) or (sc and sc:isProtectFromRainWhileEquipped())
+            if shouldReduce then
+                SunDamage = SunDamage * (UmbrellaDmgReduction / 100)  
+            end
+            
             local alpha1 = SandboxVars.vTrait.SmokeOpacity1 or 0.05
             local alpha2 = SandboxVars.vTrait.SmokeOpacity2 or 0.007
             

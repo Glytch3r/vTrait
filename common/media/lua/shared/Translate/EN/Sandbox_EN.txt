@@ -89,4 +89,9 @@ Sandbox_EN = {
     Sandbox_vTrait_PreventSpeed = "Prevent Speed",
     Sandbox_vTrait_PreventSpeed_tooltip = "Being Exposed to the sun disables speed boost",
 
+    Sandbox_vTrait_UmbrellaDmgReduction = "Umbrella Damage Reduction",
+    Sandbox_vTrait_UmbrellaDmgReduction_tooltip = "Percentage of damage reduced when an umbrella is equipped.",
+
+
+
 }
