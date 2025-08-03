@@ -19,6 +19,8 @@
 ░▓█▓░░░░▓█▓░░░▓█▓░░░░░░░▓█▓░░░░░░░░░▓█▓░░░░░▓█▓░░░░▓█▓░░░▓█▓░░░░░▓█▓░░▓█░░░░░░▓█▓░░▓█▓░░░░░██░
 ░░▓██████▓░░░░▓██████░░░▓█▓░░░░░░░░░▓█▓░░░░░░▓██████▓░░░░▓█▓░░░░░▓█▓░░░▓███████▓░░░▓█▓░░░░░██░
 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■--]]
+V_Mod = V_Mod or {}
+
 
 
 vTrait = vTrait or {}
@@ -41,6 +43,16 @@ function vTrait.defense(pl, dmgType, dmg)
 	end
 end
 Events.OnPlayerGetDamage.Add(vTrait.defense)
+
+
+
+function vTrait.dead(victim)
+    if instanceof(victim, "IsoPlayer") and victim:HasTrait("V")   then
+        vTrait.setSmoke(victim, false)
+    end
+end
+
+Events.OnPlayerDeath.Remove(vTrait.dead)
 
 
 

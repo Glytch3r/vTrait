@@ -19,6 +19,24 @@
 
 vTrait = vTrait or {}
 local defaultSpeed = 1.04
+function vTrait.tpForwardBoost()
+    local pl = getPlayer() 
+    if not pl or not pl:isMoving() then return end
+    if pl:isRunning() or pl:isSprinting() then 
+        local angle = pl:getDirectionAngle() 
+        local dx = math.cos(angle) * dist
+        local dy = math.sin(angle) * dist
+        local sq = getCell():getGridSquare(pl:getX() + dx, pl:getY() + dy, pl:getZ())
+        if sq then
+            local speed = Trait.getVSpeed(pl) / 5
+            pl:setX(sq:getX() + speed)
+            pl:setY(sq:getY() + speed)
+        end
+    end
+end
+Events.OnPlayerMove.Add(vTrait.speedHandler)
+
+
 
 function vTrait.getSpeedLimiter(pl)
     pl = pl or getPlayer()
@@ -60,6 +78,7 @@ function vTrait.speedHandler(pl)
             pl:setVariable("vSpeed", vTrait.getVSpeed(pl))    
         end
         ticks = 0
+        
     end
 end
 Events.OnPlayerUpdate.Add(vTrait.speedHandler)
