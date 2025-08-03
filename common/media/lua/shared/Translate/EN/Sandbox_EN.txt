@@ -83,6 +83,10 @@ Sandbox_EN = {
 	Sandbox_vTrait_SmokeColor2_option8 = "White",
 	Sandbox_vTrait_SmokeColor2_option9 = "Disabled",
     
-    Sandbox_vTrait_CarProtect = "Car Protect",
+    Sandbox_vTrait_CarProtect = "Car Protection",
     Sandbox_vTrait_CarProtect_tooltip = "Being inside a vehicle prevents Sun Damage",
+
+    Sandbox_vTrait_PreventSpeed = "Prevent Speed",
+    Sandbox_vTrait_PreventSpeed_tooltip = "Being Exposed to the sun disables speed boost",
+
 }

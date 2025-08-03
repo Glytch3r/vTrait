@@ -106,3 +106,9 @@ option vTrait.CarProtect
     page = vTrait, translation = vTrait_CarProtect,
 }
 
+option vTrait.PreventSpeed
+{
+    type = boolean, default = false,
+    page = vTrait, translation = vTrait_PreventSpeed,
+}
+

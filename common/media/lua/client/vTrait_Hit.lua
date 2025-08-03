@@ -38,7 +38,10 @@ function vTrait.defense(pl, dmgType, dmg)
 	if tostring(dmgType) == "WEAPONHIT" and pl == getPlayer() and  pl:HasTrait("V")  then
 		local chance = SandboxVars.vTrait.HitRecoverChance or 25
 		if vTrait.doRoll(chance) then			
-			pl:AddGeneralHealth(vTrait.getHitRecoveryPercent(dmg))
+			local recov = vTrait.getHitRecoveryPercent(dmg)
+			pl:AddGeneralHealth(recov)
+			HaloTextHelper.addTextWithArrow(pl, "Recovered: "..tostring(recov), true, HaloTextHelper.getColorGreen())
+
 		end
 	end
 end

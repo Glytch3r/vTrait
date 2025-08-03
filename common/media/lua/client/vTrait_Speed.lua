@@ -19,22 +19,7 @@
 
 vTrait = vTrait or {}
 local defaultSpeed = 1.04
-function vTrait.tpForwardBoost()
-    local pl = getPlayer() 
-    if not pl or not pl:isMoving() then return end
-    if pl:isRunning() or pl:isSprinting() then 
-        local angle = pl:getDirectionAngle() 
-        local dx = math.cos(angle) * dist
-        local dy = math.sin(angle) * dist
-        local sq = getCell():getGridSquare(pl:getX() + dx, pl:getY() + dy, pl:getZ())
-        if sq then
-            local speed = Trait.getVSpeed(pl) / 5
-            pl:setX(sq:getX() + speed)
-            pl:setY(sq:getY() + speed)
-        end
-    end
-end
-Events.OnPlayerMove.Add(vTrait.speedHandler)
+
 
 
 
@@ -56,6 +41,10 @@ end
 
 function vTrait.getVSpeed(pl)
     pl = pl or getPlayer()
+    if not pl:isMoving() then return 0 end
+    if (pl:isSneaking() or pl:isAiming()) then return 0 end
+    if not (pl:isSprinting() or pl:isRunning()) then return 0 end
+
     local minSpeed = SandboxVars.vTrait.vSpeedMin ~= nil and SandboxVars.vTrait.vSpeedMin or 1.04
     local maxSpeed = SandboxVars.vTrait.vSpeedMax ~= nil and SandboxVars.vTrait.vSpeedMax or 3
     local bonus = SandboxVars.vTrait.vSpeedBonus ~= nil and SandboxVars.vTrait.vSpeedBonus or 0.15
@@ -73,12 +62,51 @@ function vTrait.speedHandler(pl)
     ticks = ticks + 1
     if ticks % 250 == 0 then
         local hasTrait =  pl:HasTrait("V")
-        if hasTrait then 
+        if hasTrait ~= nil then 
             if pl:getVariableBoolean('isV') ~= hasTrait then pl:setVariable('isV', hasTrait) end	
             pl:setVariable("vSpeed", vTrait.getVSpeed(pl))    
         end
         ticks = 0
-        
     end
 end
 Events.OnPlayerUpdate.Add(vTrait.speedHandler)
+-----------------------            ---------------------------
+
+
+
+function vTrait.doMove( x, y)    
+    local pl = getPlayer(); 
+    if not pl or not pl:isAlive() then return end     
+    if vTrait.isShouldBurn(pl) then return end     
+    pl:setForwardDirection(x, y)
+    --pl:getForwardDirection():set(x, y)
+    local vSpeed = vTrait.getVSpeed(pl)
+    local step = math.min(1, math.max(-1, vSpeed/5))
+    local xPos = pl:getX()
+    local yPos = pl:getY()    
+    pl:setX(xPos+step*x)
+    pl:setY(yPos+step*y)
+    pl:setLx(xPos+step*x)
+    pl:setLy(yPos+step*y)
+end
+
+function vTrait.speedKey(key)
+    local f = key == getCore():getKey("Forward")
+    local b = key == getCore():getKey("Backward")
+    local l = key == getCore():getKey("Left")
+    local r = key == getCore():getKey("Right")
+    
+    if f or b or l or r then    
+        if f then
+            vTrait.doMove(-1, -1)
+        elseif b then
+            vTrait.doMove(1, 1)
+        elseif l then
+            vTrait.doMove(-1, 1)
+        elseif r then
+            vTrait.doMove(1, -1)
+        end
+    end
+end
+Events.OnKeyKeepPressed.Add(vTrait.speedKey)
+

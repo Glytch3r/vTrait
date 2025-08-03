@@ -72,11 +72,9 @@ function vTrait.setSmoke(targ)
     local spr = targ:getAttachedAnimSprite()
     local CarProtected =  vTrait.getCarProtected(targ)
     if vTrait.isShouldBurn(targ) and not CarProtected then
+      
         if not spr or spr:size() <= 0 then
             local SunDamage = SandboxVars.vTrait.SunDamage or 0.001
-            if SunDamage > 0 and not targ:isGodMod() then
-                targ:getBodyDamage():ReduceGeneralHealth(math.min(100, math.max(0, SunDamage)))
-            end
             local alpha1 = SandboxVars.vTrait.SmokeOpacity1 or 0.05
             local alpha2 = SandboxVars.vTrait.SmokeOpacity2 or 0.007
             
