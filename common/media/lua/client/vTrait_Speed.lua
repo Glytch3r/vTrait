@@ -56,7 +56,6 @@ function vTrait.getTargetSpeed(pl)
     end
     return 0
 end
-
 function vTrait.speedHandler(pl)
     pl = pl or getPlayer()
     pl:setVariable("isV", pl:HasTrait("V"))
@@ -86,7 +85,6 @@ function vTrait.doMove(x, y)
         pl:setLx(pl:getX() + (step * x))
         pl:setLy(pl:getY() + (step * y))
     end
-    print(step)
 
 end
 
