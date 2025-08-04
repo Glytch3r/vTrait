@@ -12,81 +12,83 @@
 --╣   ► Youtube: https://www.youtube.com/@glytch3r          ╠--
 --╣                                                         ╠--
 --▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬--
-
 vTrait = vTrait or {}
 local defaultSpeed = 1.04
-
 local sOpt = SandboxVars.vTrait
 
+vTrait.velocity = 0 
+vTrait.accelRate = 0.05
+vTrait.decelRate = 0.4
 
 function vTrait.getSpeedLimiter(pl)
     pl = pl or getPlayer()
-    local speedPeakDebuff = SandboxVars.vTrait.speedPeakDebuff
-
+    local speedPeakDebuff = sOpt.vSpeedPeakDebuff
     local hungerLvl = pl:getMoodles():getMoodleLevel(MoodleType.Hungry)
     local normalized = hungerLvl / 4
-    if SandboxVars.vTrait.isSpeedHungerBonus then
 
+    if sOpt.isSpeedHungerBonus then
         return 1 + normalized * (1 - speedPeakDebuff)
     else
         return math.max(speedPeakDebuff, 1 - normalized * (1 - speedPeakDebuff))
     end
 end
 
-function vTrait.getVSpeed(pl)
+function vTrait.getTargetSpeed(pl)
     pl = pl or getPlayer()
-    local res = 0
     if pl:isSneaking() or pl:isAiming() then return 0 end
-    if pl:isSprinting() or pl:isRunning() then 
-        local sprintLevel = pl:getPerkLevel(Perks.Sprinting)
-        local baseSpeed = defaultSpeed +(defaultSpeed*2)  + SandboxVars.vTrait.speedBonus * sprintLevel
-        local speed = baseSpeed --* vTrait.getSpeedLimiter(pl)
-        res = math.min(SandboxVars.vTrait.speedMax, math.max(SandboxVars.vTrait.speedMin, speed))
-    end
-    return res
-end
 
+    if pl:isSprinting() or pl:isRunning() then
+        local sprintLevel = pl:getPerkLevel(Perks.Sprinting)
+        local baseSpeed = defaultSpeed + (defaultSpeed * 2) + sOpt.vSpeedBonus * sprintLevel
+        local speed = baseSpeed - vTrait.getSpeedLimiter(pl)
+        return math.min(sOpt.vSpeedMax, math.max(sOpt.vSpeedMin, speed))
+    end
+    return 0
+end
 
 function vTrait.speedHandler(pl)
     pl = pl or getPlayer()
     if pl:HasTrait("V") then
         pl:setVariable("isV", true)
-        pl:setVariable("vSpeed", vTrait.getVSpeed(pl))
     else
         pl:setVariable("isV", false)
     end
+
+    local targetSpeed = vTrait.getTargetSpeed(pl)
+    if targetSpeed > vTrait.velocity then
+        vTrait.velocity = math.min(targetSpeed, vTrait.velocity + vTrait.accelRate)
+    elseif targetSpeed < vTrait.velocity then
+        vTrait.velocity = math.max(0, vTrait.velocity - vTrait.decelRate)
+    end
+
+    pl:setVariable("vSpeed", vTrait.velocity)
 end
 Events.OnPlayerUpdate.Add(vTrait.speedHandler)
 
 function vTrait.doMove(x, y)
-    local pl = getPlayer() 
+    local pl = getPlayer()
     if not pl or not pl:isAlive() then return end
 
-    local isShouldBurn = vTrait.isShouldBurn(pl) and SandboxVars.vTrait.PreventSpeed
-    if isShouldBurn then return end
+    if vTrait.isShouldBurn and vTrait.isShouldBurn(pl) and sOpt.PreventSpeed then return end
 
-    local vSpeed = vTrait.getVSpeed(pl) / 50
-    --local dot = pl:getDotWithForwardDirection(pl:getX(), pl:getY())
-
-    pl:setX(pl:getX() + (vSpeed*x))
-    pl:setY(pl:getY() + (vSpeed*y))
+    local step = vTrait.velocity / 50
+    --print(vTrait.velocity)
+    pl:setX(pl:getX() + (step * x))
+    pl:setY(pl:getY() + (step * y))
 
     if isClient() then
-        pl:setLx(pl:getX() + (vSpeed*x))
-        pl:setLy(pl:getY() + (vSpeed*y))
+        pl:setLx(pl:getX() + (step * x))
+        pl:setLy(pl:getY() + (step * y))
     end
-
-end    
-
-
+end
 
 function vTrait.speedKey(key)
     local f = key == getCore():getKey("Forward")
     local b = key == getCore():getKey("Backward")
     local l = key == getCore():getKey("Left")
     local r = key == getCore():getKey("Right")
-    
-    if f or b or l or r then    
+
+    if f or b or l or r then
         if f then
             vTrait.doMove(-1, -1)
         elseif b then
