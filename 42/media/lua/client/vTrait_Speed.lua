@@ -77,15 +77,18 @@ function vTrait.doMove(x, y)
     if vTrait.isShouldBurn and vTrait.isShouldBurn(pl) and sOpt.PreventSpeed then return end
     local step = vTrait.velocity / 25
     step =  math.floor(step * 100) / 100
-    --print(vTrait.velocity)
-    pl:setX(pl:getX() + (step * x))
-    pl:setY(pl:getY() + (step * y))
 
-    if isClient() then
-        pl:setLx(pl:getX() + (step * x))
-        pl:setLy(pl:getY() + (step * y))
+    if not vTrait.isBlocked(pl) then 
+
+        --print(vTrait.velocity)
+        pl:setX(pl:getX() + (step * x))
+        pl:setY(pl:getY() + (step * y))
+
+        if isClient() then
+            pl:setLx(pl:getX() + (step * x))
+            pl:setLy(pl:getY() + (step * y))
+        end
     end
-
 end
 
 function vTrait.speedKey(key)
@@ -93,7 +96,7 @@ function vTrait.speedKey(key)
     local b = key == getCore():getKey("Backward")
     local l = key == getCore():getKey("Left")
     local r = key == getCore():getKey("Right")
-
+   
     if f or b or l or r then
         if f then
             vTrait.doMove(-1, -1)
@@ -104,7 +107,19 @@ function vTrait.speedKey(key)
         elseif r then
             vTrait.doMove(1, -1)
         end
+
     end
     return key
 end
 Events.OnKeyKeepPressed.Add(vTrait.speedKey)
+
+
+function vTrait.isBlocked(pl)
+    pl = pl or getPlayer()
+    if not pl then return end 
+    local csq = pl:getCurrentSquare() 
+    local adj = csq:getAdjacentSquare(pl:getDir());
+
+    local blocked = adj:isBlockedTo(csq)
+    return blocked
+end
