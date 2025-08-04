@@ -11,7 +11,7 @@
 		<m_Type>BOOL</m_Type>
 		<m_BoolValue>true</m_BoolValue>
 	</m_Conditions>
-	<m_SpeedScale>vSpeed</m_SpeedScale>
+	
 
 	<m_Conditions>
 		<m_Name>ShoveAim</m_Name>

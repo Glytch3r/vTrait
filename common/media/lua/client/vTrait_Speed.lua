@@ -17,9 +17,18 @@ local defaultSpeed = 1.04
 local sOpt = SandboxVars.vTrait
 
 vTrait.velocity = 0 
-vTrait.accelRate = 0.05
-vTrait.decelRate = 0.4
 
+--[[ 
+    local pl = getPlayer() 
+
+    print(round(pl:getVariableFloat("WalkSpeed", 0)))
+    print(round(pl:calculateBaseSpeed(), 2))
+    pl:setVariableFloat("WalkSpeed", 1)
+    print(round(pl:getVariableFloat("WalkSpeed", 0)))
+    print(round(pl:calculateBaseSpeed(), 2))
+
+
+ ]]
 function vTrait.getSpeedLimiter(pl)
     pl = pl or getPlayer()
     local speedPeakDebuff = sOpt.vSpeedPeakDebuff
@@ -37,6 +46,8 @@ function vTrait.getTargetSpeed(pl)
     pl = pl or getPlayer()
     if pl:isSneaking() or pl:isAiming() then return 0 end
 
+
+
     if pl:isSprinting() or pl:isRunning() then
         local sprintLevel = pl:getPerkLevel(Perks.Sprinting)
         local baseSpeed = defaultSpeed + (defaultSpeed * 2) + sOpt.vSpeedBonus * sprintLevel
@@ -48,20 +59,15 @@ end
 
 function vTrait.speedHandler(pl)
     pl = pl or getPlayer()
-    if pl:HasTrait("V") then
-        pl:setVariable("isV", true)
-    else
-        pl:setVariable("isV", false)
-    end
-
+    pl:setVariable("isV", pl:HasTrait("V"))
     local targetSpeed = vTrait.getTargetSpeed(pl)
     if targetSpeed > vTrait.velocity then
-        vTrait.velocity = math.min(targetSpeed, vTrait.velocity + vTrait.accelRate)
+        vTrait.velocity = math.min(targetSpeed, vTrait.velocity + sOpt.vSpeedAccelerationRate)
     elseif targetSpeed < vTrait.velocity then
-        vTrait.velocity = math.max(0, vTrait.velocity - vTrait.decelRate)
+        vTrait.velocity = math.max(0, vTrait.velocity - sOpt.vSpeedAccelerationRate*2)
     end
-
     pl:setVariable("vSpeed", vTrait.velocity)
+    
 end
 Events.OnPlayerUpdate.Add(vTrait.speedHandler)
 
@@ -70,8 +76,8 @@ function vTrait.doMove(x, y)
     if not pl or not pl:isAlive() then return end
 
     if vTrait.isShouldBurn and vTrait.isShouldBurn(pl) and sOpt.PreventSpeed then return end
-
-    local step = vTrait.velocity / 50
+    local step = vTrait.velocity / 25
+    step =  math.floor(step * 100) / 100
     --print(vTrait.velocity)
     pl:setX(pl:getX() + (step * x))
     pl:setY(pl:getY() + (step * y))
@@ -80,6 +86,8 @@ function vTrait.doMove(x, y)
         pl:setLx(pl:getX() + (step * x))
         pl:setLy(pl:getY() + (step * y))
     end
+    print(step)
+
 end
 
 function vTrait.speedKey(key)

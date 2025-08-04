@@ -28,6 +28,11 @@ Sandbox_EN = {
     Sandbox_vTrait_isSpeedHungerBonus = "Hunger Speed Bonus",
     Sandbox_vTrait_isSpeedHungerBonus_tooltip = "If enabled hunger increases speed instead of reducing it.",
 
+
+    Sandbox_vTrait_vSpeedAccelerationRate = "Acceleration Rate",
+
+
+
     Sandbox_vTrait_RecoveryPeakDebuff = "Healing Peak Debuff",
     Sandbox_vTrait_RecoveryPeakDebuff_tooltip = "The lowest healing multiplier applied when hunger is at its worst.",
 

@@ -29,6 +29,15 @@ option vTrait.isSpeedHungerBonus
     page = vTrait, translation = vTrait_isSpeedHungerBonus,
 }
 
+option vTrait.vSpeedAccelerationRate  
+{
+    type = double, default = 0.2, min = 0, max = 1,
+    page = vTrait, translation = vTrait_vSpeedAccelerationRate,
+}
+
+
+
+
 
 option vTrait.RecoveryPeakDebuff 
 {

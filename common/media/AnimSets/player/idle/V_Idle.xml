@@ -8,7 +8,7 @@
 		<m_Type>BOOL</m_Type>
 		<m_BoolValue>true</m_BoolValue>
 	</m_Conditions>
-	<m_SpeedScale>vSpeed</m_SpeedScale>
+	
 
 	<m_BlendTime>0.20</m_BlendTime>
 	<m_Scalar>IdleSpeed</m_Scalar>
