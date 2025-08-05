@@ -1,0 +1,41 @@
+/* module Base
+{
+
+
+    evolvedrecipe ZombieMeatPot
+	{
+		BaseItem:WaterPotZombieMeat,
+		MaxItems:5,
+		ResultItem:ZombieMeatPot,
+		Cookable:true,
+		AddIngredientIfCooked:true,
+		Name:Prepare ZombieMeat,
+		CanAddSpicesEmpty:true,
+		Template:ZombieMeat,
+	}
+
+	craftRecipe PlaceZombieMeatInCookingPot
+	{
+        timedAction = MixingBowl,
+		Time = 50,
+		OnCreate = Recipe.OnCreate.AddBaseIngredientToCookingVessel,
+		Tags = AnySurfaceCraft;Cooking,
+		category = Cooking,
+		inputs
+		{
+			item 1 [Base.Pot mode:destroy flags[InheritCondition;ItemCount] mappers[potType] mode:destroy,
+			-fluid 1.5 categories[Water] mode:mixture,
+			item 10 [Base.ZombieMeat],
+		}
+		outputs
+		{
+			item 1 mapper:potType,
+		}
+		itemMapper potType
+		{
+			Base.WaterPotZombieMeat = Base.Pot,
+		}
+	}
+
+
+} */

@@ -1,0 +1,105 @@
+/* module Base
+{
+
+    /* raw */
+	item ZombieMeat
+	{
+		DisplayName = Zombie Meat,
+		DisplayCategory = Food,
+		Type = Food,
+		FoodType = Meat,
+		Weight = 0.3,
+		Icon = Smallanimalmeat,
+		BadCold = true,
+		BadInMicrowave = true,
+		DangerousUncooked = TRUE,
+		EvolvedRecipe = Cooked;ZombieMeat:15,
+		GoodHot = true,
+		IsCookable = TRUE,
+		MinutesToCook = 20,
+		MinutesToBurn = 70,
+		DaysFresh = 1,
+		DaysTotallyRotten = 1,
+		HungerChange = -90,
+		Calories = 201,
+		Carbohydrates = 5,
+		Lipids = 7.25,
+		Proteins = 45,
+		StaticModel = SmallAnimalMeat_Ground,
+		WorldStaticModel = SmallAnimalMeat_Ground,
+		CookingSound = BoilingFood,
+
+	}
+
+	/* prepared */
+	item WaterPotZombieMeat
+	{
+		DisplayName = Cooking Pot with Zombie Meat,
+		DisplayCategory = Food,
+		Type = Food,
+		Weight = 3,
+		BadInMicrowave = true,
+		CookingSound = BoilingFood,
+		EatType = Pot,
+		PourType = Pot,
+		FoodType = Game,
+
+		GoodHot = true,
+		IsCookable = true,
+		ReplaceOnUse = Pot,
+		MinutesToCook = 20,
+		MinutesToBurn = 50,
+		DaysFresh = 0,
+		DaysTotallyRotten = 0,
+		HungerChange = -10,
+		UnhappyChange = 20,
+		Calories = 480,
+		Carbohydrates = 108,
+		Lipids = 0,
+		Proteins = 12,
+		Tags = ZombieMeat;HasMetal,
+		SoundMap = DumpContents EmptyPot,
+		EvolvedRecipeName = ZombieMeat,
+        ReplaceOnCooked = Base.ZombieMeatPot,
+
+		StaticModel = CookingPotRice_Ground,
+		WorldStaticModel = CookingPotRice_Ground,
+		Icon = Pot_Water,
+	}
+
+    /* cooked */
+	item ZombieMeatPot 
+	{
+		DisplayName = Zombie Meat,
+		DisplayCategory = Food,
+		Type = Food,
+		Weight = 3,
+		BadInMicrowave = true,
+		CookingSound = BoilingFood,
+		EatType = Pot,
+		PourType = Pot,
+		GoodHot = true,
+		IsCookable = true,
+
+		ReplaceOnUse = Pot,
+		MinutesToCook = 20,
+		MinutesToBurn = 50,
+		DaysFresh = 1,
+		DaysTotallyRotten = 20,
+		UnhappyChange = 20,
+		Calories = 720,
+		Carbohydrates = 0,
+		Lipids = 48,
+		Proteins = 78,
+		Tags = ZombieMeat;HasMetal,
+
+		HungerChange = -10,
+		SoundMap = DumpContents EmptyPot,
+		EvolvedRecipeName = ZombieMeat,
+
+		StaticModel = CookingPotRice_Ground,
+		WorldStaticModel = CookingPotRice_Ground,
+		Icon = PotFull,
+
+	}
+} */

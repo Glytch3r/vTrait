@@ -22,45 +22,75 @@
 
 
 
-
 vTrait = vTrait or {}
 
-function vTrait.getHitRecoveryPercent(dmg)
-    local dmgPercent = SandboxVars.vTrait.HitRecoveryPercent or 30
-    local factor = dmgPercent / 100           
-    local roll = ZombRand(0, math.floor(dmg * factor) + 1)
-    return math.min(100, math.max(0, roll))
+function vTrait.isUnarmed(pl)
+	pl = pl or getPlayer()
+    return tostring(WeaponType.getWeaponType(pl)) == "barehand"
 end
 
+--[[ 
+function vTrait.attack(pl, chargeDelta, wpn)
+end
+Hook.Attack.Add(vTrait.attack)
+ ]]
 
-function vTrait.defense(pl, dmgType, dmg)
-	pl = pl or getPlayer()
-	if tostring(dmgType) == "WEAPONHIT" and pl == getPlayer() and  pl:HasTrait("V")  then
-		local chance = SandboxVars.vTrait.HitRecoverChance or 25
-		if vTrait.doRoll(chance) then			
-			local recov = vTrait.getHitRecoveryPercent(dmg)
-			pl:AddGeneralHealth(recov)
-			HaloTextHelper.addTextWithArrow(pl, "Recovered: "..tostring(recov), true, HaloTextHelper.getColorGreen())
-
+function vTrait.click()
+	local pl = getPlayer() 
+	if not pl then return end
+	if pl:HasTrait("V") and vTrait.isUnarmed(pl) then
+		local sq = pl:getSquare():getAdjacentSquare(pl:getDir());
+		if sq then
+			local zed = sq:getZombie()
+			if zed and not vTrait.isTargOnFloor(zed) then			
+				pl:setInitiateAttack(false)
+				pl:setDoShove(true)
+				ISTimedActionQueue.add(vTrait_BiteAction:new(pl, sq, zed, -1))
+			end
 		end
 	end
 end
-Events.OnPlayerGetDamage.Add(vTrait.defense)
+Events.OnMouseUp.Add(vTrait.click)
 
-
-
-function vTrait.dead(victim)
-    if instanceof(victim, "IsoPlayer") and victim:HasTrait("V")   then
-        vTrait.setSmoke(victim, false)
-    end
+function vTrait.isTargOnFloor(zed)
+	if tostring(zed:getCurrentStateName()) == "ZombieOnGroundState" then return true end
+	if zed:isBeingSteppedOn() then return true end
+	if zed:isCanWalk() then return true end
+	if zed:isFakeDead() then return true end
+	if zed:isForceEatingAnimation() then return true end
+	if zed:isOnFloor() then return true end
+	if zed:isCrawling() then return true end
+	if zed:isSitAgainstWall() then return true end
+	if zed:isUnderVehicle() then return true end
+	--if zed:isUseless() then return true end
+	return false
+end
+function vTrait.doRoll(percent)
+	if percent <= 0 then return false end
+	if percent >= 100 then return true end
+	return percent >= ZombRand(1, 101)
 end
 
-Events.OnPlayerDeath.Remove(vTrait.dead)
+function vTrait.doDmg(zed)
+    local pl = getPlayer()
+    if not pl or not zed or not zed:isAlive() then return end
+	if not instanceof(zed, "IsoZombie")  then return end
+    zed:setAttackedBy(pl)
+
+    if vTrait.doRoll(50) then
+        zed:setHitReaction("")
+    else
+        zed:setKnockedDown(true)
+    end
+end
 
 
 
 --[[ 
-
+function vTrait.isUnarmed(pl)
+	pl = pl or getPlayer()
+    return tostring(WeaponType.getWeaponType(pl)) == "barehand"
+end
 
 function vTrait.hitZed(zed, attacker, bodyPart, wpn)
     if attacker and zed and instanceof(attacker, "IsoPlayer") and attacker:HasTrait("V") and vTrait.isUnarmed(attacker) and not vTrait.isTargOnFloor(zed) then
