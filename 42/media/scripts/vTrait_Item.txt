@@ -1,4 +1,4 @@
-/* module Base
+ module Base
 {
 
     /* raw */
@@ -13,7 +13,6 @@
 		BadCold = true,
 		BadInMicrowave = true,
 		DangerousUncooked = TRUE,
-		EvolvedRecipe = Cooked;ZombieMeat:15,
 		GoodHot = true,
 		IsCookable = TRUE,
 		MinutesToCook = 20,
@@ -102,4 +101,4 @@
 		Icon = PotFull,
 
 	}
-} */
+} 
