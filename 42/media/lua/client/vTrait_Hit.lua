@@ -41,7 +41,6 @@ function vTrait.defense(pl, dmgType, dmg)
 			local recov = vTrait.getHitRecoveryPercent(dmg)
 			pl:AddGeneralHealth(recov)
 			HaloTextHelper.addTextWithArrow(pl, "Recovered: "..tostring(recov), true, HaloTextHelper.getColorGreen())
-
 		end
 	end
 end
@@ -49,12 +48,15 @@ Events.OnPlayerGetDamage.Add(vTrait.defense)
 
 
 
-function vTrait.dead(victim)
-    if instanceof(victim, "IsoPlayer") and victim:HasTrait("V")   then
-        vTrait.setSmoke(victim, false)
+function vTrait.dead(pl)
+    if instanceof(pl, "IsoPlayer") and pl:HasTrait("V")   then
+		local spr = targ:getAttachedAnimSprite()
+		if spr and spr:size() > 0 then
+			pl:RemoveAttachedAnims()
+			pl:clearAttachedAnimSprite()
+		end
     end
 end
-
 Events.OnPlayerDeath.Remove(vTrait.dead)
 
 

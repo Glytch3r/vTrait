@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<animNode x_extends="default.xml">
+	<m_Name>V_BiteAction</m_Name>
+	<m_AnimName>Bob_Shove</m_AnimName>
+
+
+	<m_Conditions>
+		<m_StringValue>V_BiteAction</m_StringValue>
+	</m_Conditions>
+</animNode>

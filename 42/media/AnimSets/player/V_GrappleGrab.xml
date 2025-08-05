@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <animNode>
-	<m_Name>GrappleGrab</m_Name>
+	<m_Name>V_GrappleGrab</m_Name>
 	<m_Priority>4</m_Priority>
 	<m_AnimName>Zombie_Bite</m_AnimName>
 	<m_Looped>false</m_Looped>
@@ -12,6 +12,8 @@
 		<m_Type>BOOL</m_Type>
 		<m_BoolValue>true</m_BoolValue>
 	</m_Conditions>
+
+
 	<m_Conditions x_name="c36a580a-cf14-4049-9b45-05bc1bc5f5c3">
 		<m_Name>bDoGrapple</m_Name>
 		<m_Type>BOOL</m_Type>

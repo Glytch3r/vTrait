@@ -68,45 +68,55 @@ function vTrait.getSmokeColor(index, alpha)
 end
 
 
-function vTrait.setSmoke(targ)
+function vTrait.setDamage(targ, shouldReduce)
     local spr = targ:getAttachedAnimSprite()
-    local CarProtected =  vTrait.getCarProtected(targ)
+    local CarProtected = vTrait.getCarProtected(targ)
     if vTrait.isShouldBurn(targ) and not CarProtected then
-      
-        if not spr or spr:size() <= 0 then
-            local SunDamage = SandboxVars.vTrait.SunDamage or 0.001
-
+        local SunDamage = SandboxVars.vTrait.SunDamage or 0.001
+        if shouldReduce then
             local UmbrellaDmgReduction = SandboxVars.vTrait.UmbrellaDmgReduction or 50
-            local pr = targ:getPrimaryHandItem()
-            local sc =  targ:getSecondaryHandItem()             
-            local shouldReduce = (pr and pr:isProtectFromRainWhileEquipped()) or (sc and sc:isProtectFromRainWhileEquipped())
-      
-            
-            local alpha1 = SandboxVars.vTrait.SmokeOpacity1 or 0.05
-            local alpha2 = SandboxVars.vTrait.SmokeOpacity2 or 0.007
+            local reduction = (UmbrellaDmgReduction / 100)  
+            SunDamage = SunDamage * reduction 
+        end
+        targ:getBodyDamage():ReduceGeneralHealth(SunDamage)
+    end
+end
 
-            if shouldReduce then
-                local reduction = (UmbrellaDmgReduction / 100)  
-                SunDamage = SunDamage * reduction 
-                alpha1 = alpha1 * reduction 
-                alpha2 = alpha2 * reduction 
-            end
-            
+vTrait.col1 = SandboxVars.vTrait.SmokeColor1
+vTrait.col2 = SandboxVars.vTrait.SmokeColor2
+function vTrait.setSmoke(targ, shouldReduce)
+    local spr = targ:getAttachedAnimSprite()
+    local CarProtected = vTrait.getCarProtected(targ)
+    if vTrait.isShouldBurn(targ) and not CarProtected then
+        local UmbrellaDmgReduction = SandboxVars.vTrait.UmbrellaDmgReduction or 50
+        local alpha1 = SandboxVars.vTrait.SmokeOpacity1 or 0.05
+        local alpha2 = SandboxVars.vTrait.SmokeOpacity2 or 0.007
 
-            local col1 = SandboxVars.vTrait.SmokeColor1
-            if col1 ~= 9 then
-                targ:AttachAnim("Smoke", "01", 2, 0.2, 0, 270, true, 0, false, 0, vTrait.getSmokeColor(col1, alpha1))
-            end
-
-            local col2 = SandboxVars.vTrait.SmokeColor2
-            if col2 ~= 9 then
-                targ:AttachAnim("Smoke", "01", 6, 0.05, 0, 260, true, 0, false, 0, vTrait.getSmokeColor(col2, alpha2))
-            end
-            
-            
+        if shouldReduce then
+            local reduction = (UmbrellaDmgReduction / 100)
+            alpha1, alpha2 = alpha1 * reduction, alpha2 * reduction
+        end
+        
+        if vTrait.col1 ~= SandboxVars.vTrait.SmokeColor1 or vTrait.col2 ~= SandboxVars.vTrait.SmokeColor2 then
+            targ:RemoveAttachedAnims()
+            targ:clearAttachedAnimSprite()
             spr = targ:getAttachedAnimSprite()
-            spr:get(0):setScale(1, 0.8)
-            spr:get(1):setScale(0.8, 1)
+        end
+
+        if not spr or spr:size() <= 0 then
+            vTrait.col1 = SandboxVars.vTrait.SmokeColor1
+            if vTrait.col1 ~= 9 then
+                targ:AttachAnim("Smoke", "01", 2, 0.2, 0, 270, true, 0, false, 0, vTrait.getSmokeColor(vTrait.col1, alpha1))
+            end
+
+            vTrait.col2 = SandboxVars.vTrait.SmokeColor2
+            if vTrait.col2 ~= 9 then
+                targ:AttachAnim("Smoke", "01", 6, 0.05, 0, 260, true, 0, false, 0, vTrait.getSmokeColor(vTrait.col2, alpha2))
+            end
+
+            spr = targ:getAttachedAnimSprite()
+            if spr:size() > 0 then spr:get(0):setScale(1, 0.8) end
+            if spr:size() > 1 then spr:get(1):setScale(0.8, 1) end
         end
     elseif spr and spr:size() > 0 then
         targ:RemoveAttachedAnims()
@@ -114,10 +124,15 @@ function vTrait.setSmoke(targ)
     end
 end
 
+
 function vTrait.PenaltyHandler()
     local targ = getPlayer()
     if targ and targ:isAlive() and targ:HasTrait("V") then
-        vTrait.setSmoke(targ)
+        local pr = targ:getPrimaryHandItem()
+        local sc =  targ:getSecondaryHandItem()             
+        local shouldReduce = (pr and pr:isProtectFromRainWhileEquipped()) or (sc and sc:isProtectFromRainWhileEquipped())
+        vTrait.setDamage(targ, shouldReduce)
+        vTrait.setSmoke(targ, shouldReduce)
     end
 end
 Events.OnPlayerUpdate.Add(vTrait.PenaltyHandler)
