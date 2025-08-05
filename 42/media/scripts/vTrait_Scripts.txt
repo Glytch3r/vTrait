@@ -1,20 +1,8 @@
-/* module Base
+/* 
+module Base
 {
 
-
-    evolvedrecipe ZombieMeatPot
-	{
-		BaseItem:WaterPotZombieMeat,
-		MaxItems:5,
-		ResultItem:ZombieMeatPot,
-		Cookable:true,
-		AddIngredientIfCooked:true,
-		Name:Prepare ZombieMeat,
-		CanAddSpicesEmpty:true,
-		Template:ZombieMeat,
-	}
-
-	craftRecipe PlaceZombieMeatInCookingPot
+    craftRecipe PlaceZombieMeatInCookingPot
 	{
         timedAction = MixingBowl,
 		Time = 50,
@@ -23,9 +11,10 @@
 		category = Cooking,
 		inputs
 		{
-			item 1 [Base.Pot mode:destroy flags[InheritCondition;ItemCount] mappers[potType] mode:destroy,
+			item 1 [Base.Pot] mode:destroy flags[InheritCondition;ItemCount] mappers[potType] mode:destroy,
 			-fluid 1.5 categories[Water] mode:mixture,
-			item 10 [Base.ZombieMeat],
+            item 10 [Base.ZombieMeat],
+
 		}
 		outputs
 		{
@@ -38,4 +27,15 @@
 	}
 
 
-} */
+	evolvedrecipe ZombieMeatPot
+	{
+		BaseItem:WaterPotZombieMeat,
+		MaxItems:5,
+		ResultItem:ZombieMeatPot,
+		Cookable:true,
+		Name:Prepare ZombieMeat,
+		Template:ZombieMeat,
+	}
+
+}  
+*/

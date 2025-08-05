@@ -20,58 +20,48 @@
 ░░▓██████▓░░░░▓██████░░░▓█▓░░░░░░░░░▓█▓░░░░░░▓██████▓░░░░▓█▓░░░░░▓█▓░░░▓███████▓░░░▓█▓░░░░░██░
 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■--]]
 
-
-
 vTrait = vTrait or {}
 
 require "TimedActions/ISBaseTimedAction"
 
-
-vTrait_BiteAction = ISBaseTimedAction:derive("vTrait_BiteAction");
-
-function vTrait_BiteAction:isValidStart()
-	return zed and instanceof(zed, "IsoZombie") and vTrait.isUnarmed(self.pl)
-end
+vTrait_BiteAction = ISBaseTimedAction:derive("vTrait_BiteAction")
 
 function vTrait_BiteAction:isValid()
-
+    return self.pl and self.zed and self.zed:isAlive()
 end
 
 function vTrait_BiteAction:update()
-	
-end
-
-function vTrait_BiteAction:forceComplete()
-    self.action:forceComplete();
+    -- Optionally update animation or cancel logic here
 end
 
 function vTrait_BiteAction:start()
-	self:setActionAnim("V_BiteAction")	
+    self.pl:setAnimVariable("V_BiteAction", true)
+    self.pl:setActionAnim("V_BiteAction")
+	print("vTrait_BiteAction")
+
+
 end
 
 function vTrait_BiteAction:stop()
-	ISBaseTimedAction.stop(self);
+    ISBaseTimedAction.stop(self)
 end
 
 function vTrait_BiteAction:perform()
-	ISBaseTimedAction.perform(self);
+    if self.zed and self.zed:isAlive() then
+        vTrait.doDmg(self.zed)
+    end
+	print("vTrait_BiteAction")
+    ISBaseTimedAction.perform(self)
 end
 
-function vTrait_BiteAction:setOverrideHandModels(_primaryHand, _secondaryHand, _resetModel)
-	self.action:setOverrideHandModelsObject(_primaryHand, _secondaryHand, _resetModel or true)
+function vTrait_BiteAction:new(pl, zed, maxTime)
+    local o = ISBaseTimedAction.new(self, pl) 
+    o.pl = pl
+    o.character = pl
+    o.zed = zed
+    o.stopOnWalk = true
+    o.stopOnRun = true
+    o.stopOnAim = false
+    o.maxTime = maxTime or 10
+    return o
 end
-
-function vTrait_BiteAction:new(pl, sq, zed, maxTime)
-	local o = {}
-	setmetatable(o, self)
-	self.__index = self
-	o.pl = pl;
-	o.sq = sq;
-	o.zed = zed;
-	o.stopOnWalk = true;
-	o.stopOnRun = true;
-	o.stopOnAim = true;
-	o.maxTime = maxTime or -1;
-	return o
-end
-

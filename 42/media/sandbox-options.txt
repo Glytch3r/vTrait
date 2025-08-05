@@ -126,3 +126,23 @@ option vTrait.UmbrellaDmgReduction
 	type = double, default = 50,    min = 0,    max = 100,
     page = vTrait, translation = vTrait_UmbrellaDmgReduction,
 }
+
+
+
+option vTrait.FoodList
+{
+	type = string, default = Base.ZombieMeat;Base.zSubstance;Base.Smallbirdmeat;Base.Smallanimalmeat;Base.Rabbitmeat;Base.MincedMeat;Base.FrogMeat;Base.CorpseAnimal;Base.Specimen_Brain;Base.Animal_Brain;Base.Animal_Brain_Small;Base.MeatPatty;Base.GroundMeat,
+    page = vTrait, translation = vTrait_FoodList,
+}
+option vTrait.DisableDrink
+{
+    type = boolean, default = false,
+    page = vTrait, translation = vTrait_DisableDrink,
+}
+option vTrait.DisableEat
+{
+    type = boolean, default = true,
+    page = vTrait, translation = vTrait_DisableEat,
+}
+
+

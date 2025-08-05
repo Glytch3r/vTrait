@@ -19,71 +19,79 @@
 ░▓█▓░░░░▓█▓░░░▓█▓░░░░░░░▓█▓░░░░░░░░░▓█▓░░░░░▓█▓░░░░▓█▓░░░▓█▓░░░░░▓█▓░░▓█░░░░░░▓█▓░░▓█▓░░░░░██░
 ░░▓██████▓░░░░▓██████░░░▓█▓░░░░░░░░░▓█▓░░░░░░▓██████▓░░░░▓█▓░░░░░▓█▓░░░▓███████▓░░░▓█▓░░░░░██░
 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■--]]
-
-
-
 vTrait = vTrait or {}
 
 function vTrait.isUnarmed(pl)
-	pl = pl or getPlayer()
-    return tostring(WeaponType.getWeaponType(pl)) == "barehand"
+    pl = pl or getPlayer()
+    local wpn = pl:getPrimaryHandItem()
+    return not wpn or (wpn:getCategories() and wpn:getCategories():contains("BareHands"))
 end
-
---[[ 
-function vTrait.attack(pl, chargeDelta, wpn)
-end
-Hook.Attack.Add(vTrait.attack)
- ]]
 
 function vTrait.click()
-	local pl = getPlayer() 
-	if not pl then return end
-	if pl:HasTrait("V") and vTrait.isUnarmed(pl) then
-		local sq = pl:getSquare():getAdjacentSquare(pl:getDir());
-		if sq then
-			local zed = sq:getZombie()
-			if zed and not vTrait.isTargOnFloor(zed) then			
-				pl:setInitiateAttack(false)
-				pl:setDoShove(true)
-				ISTimedActionQueue.add(vTrait_BiteAction:new(pl, sq, zed, -1))
-			end
-		end
-	end
+    if not isIngameState() then return end
+
+    local pl = getPlayer()
+    if not pl or not pl:HasTrait("V") then return end
+
+    local zed = vTrait.getTargZ(pl)
+    local unarmed = vTrait.isUnarmed(pl)
+    pl:setAuthorizeMeleeAction(unarmed)
+
+    if unarmed and zed then
+        pl:setInitiateAttack(false)
+        ISTimedActionQueue.add(vTrait_BiteAction:new(pl, zed, -1))
+    end
+	print("vTrait_BiteAction")
 end
 Events.OnMouseUp.Add(vTrait.click)
 
-function vTrait.isTargOnFloor(zed)
-	if tostring(zed:getCurrentStateName()) == "ZombieOnGroundState" then return true end
-	if zed:isBeingSteppedOn() then return true end
-	if zed:isCanWalk() then return true end
-	if zed:isFakeDead() then return true end
-	if zed:isForceEatingAnimation() then return true end
-	if zed:isOnFloor() then return true end
-	if zed:isCrawling() then return true end
-	if zed:isSitAgainstWall() then return true end
-	if zed:isUnderVehicle() then return true end
-	--if zed:isUseless() then return true end
-	return false
+function vTrait.getTargZ(pl)
+    pl = pl or getPlayer()
+    if not pl then return end 
+    local sq = pl:getSquare()
+    if not sq then return end
+    local adj = sq:getAdjacentSquare(pl:getDir())
+    if not adj then return end
+
+    local objs = adj:getMovingObjects()
+    for i = 0, objs:size() - 1 do
+        local obj = objs:get(i)
+        if instanceof(obj, "IsoZombie") and obj:isAlive() and not vTrait.isTargOnFloor(obj) then
+            return obj
+        end
+    end
 end
+
+function vTrait.isTargOnFloor(zed)
+    if tostring(zed:getCurrentStateName()) == "ZombieOnGroundState" then return true end
+    if zed:isBeingSteppedOn() then return true end
+    if zed:isFakeDead() then return true end
+    if zed:isForceEatingAnimation() then return true end
+    if zed:isOnFloor() then return true end
+    if zed:isCrawling() then return true end
+    if zed:isSitAgainstWall() then return true end
+    if zed:isUnderVehicle() then return true end
+    return false
+end
+
 function vTrait.doRoll(percent)
-	if percent <= 0 then return false end
-	if percent >= 100 then return true end
-	return percent >= ZombRand(1, 101)
+    if percent <= 0 then return false end
+    if percent >= 100 then return true end
+    return percent >= ZombRand(1, 101)
 end
 
 function vTrait.doDmg(zed)
     local pl = getPlayer()
-    if not pl or not zed or not zed:isAlive() then return end
-	if not instanceof(zed, "IsoZombie")  then return end
-    zed:setAttackedBy(pl)
+    if not pl or not zed or not zed:isAlive() or not instanceof(zed, "IsoZombie") then return end
 
+    zed:setAttackedBy(pl)
     if vTrait.doRoll(50) then
         zed:setHitReaction("")
     else
         zed:setKnockedDown(true)
     end
+    zed:setHealth(zed:getHealth() - 0.1) 
 end
-
 
 
 --[[ 

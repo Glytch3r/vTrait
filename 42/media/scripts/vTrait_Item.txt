@@ -1,5 +1,17 @@
  module Base
 {
+	model ZombieMeat_Ground
+	{
+		mesh = WorldItems/SmallAnimalMeat,
+		texture = WorldItems/ZombieMeat,        
+		scale = 0.5,
+
+		attachment Bip01_Prop2
+		{
+			offset = -0.0340 0.0270 -0.0180,
+			rotate = -162.0000 68.0000 -90.0000,
+		}
+	}
 
     /* raw */
 	item ZombieMeat
@@ -9,17 +21,18 @@
 		Type = Food,
 		FoodType = Meat,
 		Weight = 0.3,
-		Icon = Smallanimalmeat,
+		Icon = ZombieMeat,
 		BadCold = true,
 		BadInMicrowave = true,
 		DangerousUncooked = TRUE,
 		GoodHot = true,
-		IsCookable = TRUE,
-		MinutesToCook = 20,
-		MinutesToBurn = 70,
+
+		MinutesToCook = 360,
+		MinutesToBurn = 540,
 		DaysFresh = 1,
 		DaysTotallyRotten = 1,
-		HungerChange = -90,
+		HungerChange = -1,
+        ThirstChange	=	-1,
 		Calories = 201,
 		Carbohydrates = 5,
 		Lipids = 7.25,
@@ -27,78 +40,55 @@
 		StaticModel = SmallAnimalMeat_Ground,
 		WorldStaticModel = SmallAnimalMeat_Ground,
 		CookingSound = BoilingFood,
-
+        
+        ReplaceOnCooked = Base.zSubstance,
+		IsCookable = TRUE,
+		MinutesToCook = 180,
+		MinutesToBurn = 400,
+		PoisonPower = 1,
 	}
 
-	/* prepared */
-	item WaterPotZombieMeat
+ 
+	model zSubstance_Ground
 	{
-		DisplayName = Cooking Pot with Zombie Meat,
-		DisplayCategory = Food,
-		Type = Food,
-		Weight = 3,
-		BadInMicrowave = true,
-		CookingSound = BoilingFood,
-		EatType = Pot,
-		PourType = Pot,
-		FoodType = Game,
+		mesh = WorldItems/Egg,
+		texture = WorldItems/zSubstance,
+		scale = 0.25,
 
-		GoodHot = true,
-		IsCookable = true,
-		ReplaceOnUse = Pot,
-		MinutesToCook = 20,
-		MinutesToBurn = 50,
-		DaysFresh = 0,
-		DaysTotallyRotten = 0,
-		HungerChange = -10,
-		UnhappyChange = 20,
-		Calories = 480,
-		Carbohydrates = 108,
-		Lipids = 0,
-		Proteins = 12,
-		Tags = ZombieMeat;HasMetal,
-		SoundMap = DumpContents EmptyPot,
-		EvolvedRecipeName = ZombieMeat,
-        ReplaceOnCooked = Base.ZombieMeatPot,
-
-		StaticModel = CookingPotRice_Ground,
-		WorldStaticModel = CookingPotRice_Ground,
-		Icon = Pot_Water,
+		attachment Bip01_Prop2
+		{
+			offset = -0.0276 0.0541 -0.0264,
+			rotate = -80.4333 15.0056 -170.6794,
+			scale = 0.8700,
+		}
 	}
 
-    /* cooked */
-	item ZombieMeatPot 
+
+   /* cooked */
+	item zSubstance
 	{
-		DisplayName = Zombie Meat,
+		DisplayName = Substance Z,
 		DisplayCategory = Food,
 		Type = Food,
-		Weight = 3,
-		BadInMicrowave = true,
-		CookingSound = BoilingFood,
-		EatType = Pot,
-		PourType = Pot,
+		Weight = 0.3,
+		Icon = zSubstance,
+		BadCold = true,
+		BadInMicrowave = true,	
+		FoodType = Meat,
 		GoodHot = true,
-		IsCookable = true,
 
-		ReplaceOnUse = Pot,
-		MinutesToCook = 20,
-		MinutesToBurn = 50,
-		DaysFresh = 1,
-		DaysTotallyRotten = 20,
-		UnhappyChange = 20,
-		Calories = 720,
+		DaysFresh = 16,
+		DaysTotallyRotten = 30,
+		HungerChange = -140,
+        ThirstChange	=	-140,
+		Calories = 220,
 		Carbohydrates = 0,
-		Lipids = 48,
-		Proteins = 78,
-		Tags = ZombieMeat;HasMetal,
-
-		HungerChange = -10,
-		SoundMap = DumpContents EmptyPot,
-		EvolvedRecipeName = ZombieMeat,
-
-		StaticModel = CookingPotRice_Ground,
-		WorldStaticModel = CookingPotRice_Ground,
-		Icon = PotFull,
+		Lipids = 9.35,
+		Proteins = 31.62,
+	
+		StaticModel = zSubstance_Ground,
+		WorldStaticModel = zSubstance_Ground,
 
 	}
+
 } 
