@@ -1,0 +1,102 @@
+Sandbox_EN = {
+
+    Sandbox_vTrait = "V Mod",
+
+
+
+    Sandbox_vTrait_HungerLossMin = "Minimum Hunger Change",
+    Sandbox_vTrait_HungerLossMax = "Maximum Hunger Change",
+    Sandbox_vTrait_ThirstLossMin = "Minimum Thirst Change",
+    Sandbox_vTrait_ThirstLossMax = "Maximum Thirst Change",
+    Sandbox_vTrait_DisableEat = "Disable Eat",
+    Sandbox_vTrait_RecoverHunger = "Recover Hunger",
+    Sandbox_vTrait_DisableDrink = "Disable Drink",
+    Sandbox_vTrait_RecoverThirst = "Recover Thirst",
+    
+    Sandbox_vTrait_vSpeedMin = "Minimum Speed",
+    Sandbox_vTrait_vSpeedMin_tooltip = "The minimum movement speed multiplier for Vs.",
+
+    Sandbox_vTrait_vSpeedMax = "Maximum Speed",
+    Sandbox_vTrait_vSpeedMax_tooltip = "The maximum movement speed multiplier for Vs.",
+
+    Sandbox_vTrait_vSpeedBonus = "Speed Bonus per Sprint Level",
+    Sandbox_vTrait_vSpeedBonus_tooltip = "Additional speed per sprinting level for Vs.",
+
+    Sandbox_vTrait_vSpeedPeakDebuff = "Speed Peak Debuff",
+    Sandbox_vTrait_vSpeedPeakDebuff_tooltip = "The lowest speed multiplier applied when hunger is at its worst.",
+
+    Sandbox_vTrait_isSpeedHungerBonus = "Hunger Speed Bonus",
+    Sandbox_vTrait_isSpeedHungerBonus_tooltip = "If enabled hunger increases speed instead of reducing it.",
+
+
+    Sandbox_vTrait_vSpeedAccelerationRate = "Acceleration Rate",
+
+
+
+    Sandbox_vTrait_RecoveryPeakDebuff = "Healing Peak Debuff",
+    Sandbox_vTrait_RecoveryPeakDebuff_tooltip = "The lowest healing multiplier applied when hunger is at its worst.",
+
+    Sandbox_vTrait_isHealHungerBonus = "Hunger Healing Bonus",
+    Sandbox_vTrait_isHealHungerBonus_tooltip = "If enabled hunger increases healing rate instead of reducing it.",
+
+    Sandbox_vTrait_RecoverRateMin = "Minimum Injury Recovery Rate",
+    Sandbox_vTrait_RecoverRateMin_tooltip = "The minimum amount of injury recovery applied every healing tick.",
+
+    Sandbox_vTrait_RecoverRateMax = "Maximum Injury Recovery Rate",
+    Sandbox_vTrait_RecoverRateMax_tooltip = "The maximum amount of injury recovery applied every healing tick.",
+
+    Sandbox_vTrait_HealthRecoveryRate = "Health Recovery Rate",
+    Sandbox_vTrait_HealthRecoveryRate_tooltip = "The amount of general health recovery applied every healing tick.",
+
+
+    Sandbox_vTrait_HitRecoverChance = "Health Recovery Chance",
+    Sandbox_vTrait_HitRecoverChance_tooltip = "Percent chance to trigger Hit Recovery.",
+
+    Sandbox_vTrait_HitRecoveryPercent = "Hit Recover Percent",
+    Sandbox_vTrait_HitRecoveryPercent_tooltip = "The amount of damage recovered after getting hit.",
+
+
+
+    Sandbox_vTrait_SunDamage = "Sun Damage",
+    Sandbox_vTrait_SunDamage_tooltip = "Damage done to Vs when they are exposed to the sun. Set to 0 to disable feature",
+
+    Sandbox_vTrait_SmokeOpacity1 = "Smoke 1 Opacity",
+
+    Sandbox_vTrait_SmokeColor1 = "Smoke Color 1",
+    Sandbox_vTrait_SmokeColor1_tooltip = "Main Color of the smoke effect after getting exposed to the sun.",
+	Sandbox_vTrait_SmokeColor1_option1 = "Gray",
+	Sandbox_vTrait_SmokeColor1_option2 = "Red",
+	Sandbox_vTrait_SmokeColor1_option3 = "Green",
+	Sandbox_vTrait_SmokeColor1_option4 = "Blue",
+	Sandbox_vTrait_SmokeColor1_option5 = "Yellow",
+	Sandbox_vTrait_SmokeColor1_option6 = "Purple",
+	Sandbox_vTrait_SmokeColor1_option7 = "Black",
+	Sandbox_vTrait_SmokeColor1_option8 = "White",
+	Sandbox_vTrait_SmokeColor1_option9 = "Disabled",
+
+    Sandbox_vTrait_SmokeOpacity2 = "Smoke 2 Opacity",
+
+    Sandbox_vTrait_SmokeColor2 = "Smoke Color 2",
+    Sandbox_vTrait_SmokeColor2_tooltip = "Subtle Color of the smoke effect after getting exposed to the sun.",
+	Sandbox_vTrait_SmokeColor2_option1 = "Gray",
+	Sandbox_vTrait_SmokeColor2_option2 = "Red",
+	Sandbox_vTrait_SmokeColor2_option3 = "Green",
+	Sandbox_vTrait_SmokeColor2_option4 = "Blue",
+	Sandbox_vTrait_SmokeColor2_option5 = "Yellow",
+	Sandbox_vTrait_SmokeColor2_option6 = "Purple",
+	Sandbox_vTrait_SmokeColor2_option7 = "Black",
+	Sandbox_vTrait_SmokeColor2_option8 = "White",
+	Sandbox_vTrait_SmokeColor2_option9 = "Disabled",
+    
+    Sandbox_vTrait_CarProtect = "Car Protection",
+    Sandbox_vTrait_CarProtect_tooltip = "Being inside a vehicle prevents Sun Damage",
+
+    Sandbox_vTrait_PreventSpeed = "Prevent Speed",
+    Sandbox_vTrait_PreventSpeed_tooltip = "Being Exposed to the sun disables speed boost",
+
+    Sandbox_vTrait_UmbrellaDmgReduction = "Umbrella Damage Reduction",
+    Sandbox_vTrait_UmbrellaDmgReduction_tooltip = "Percentage of damage reduced when an umbrella is equipped.",
+
+
+
+}
