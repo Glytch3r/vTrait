@@ -75,10 +75,10 @@ option vTrait.HitRecoveryPercent
     type = double, default = 30, min = 0, max = 100,
     page = vTrait, translation = vTrait_HitRecoveryPercent,
 }
-option vTrait.HourlyInjuryHealChance
+option vTrait.InjuryHealChance
 {
     type = double, default = 50, min = 0, max = 100,
-    page = vTrait, translation = vTrait_HourlyInjuryHealChance,
+    page = vTrait, translation = vTrait_InjuryHealChance,
 }
 option vTrait.InjuryHealOverheadMessage 
 {
@@ -146,7 +146,7 @@ option vTrait.UmbrellaDmgReduction
 
 option vTrait.FoodList
 {
-	type = string, default = Base.ZombieMeat;Base.zSubstance;Base.Smallbirdmeat;Base.Smallanimalmeat;Base.Rabbitmeat;Base.MincedMeat;Base.FrogMeat;Base.CorpseAnimal;Base.Specimen_Brain;Base.Animal_Brain;Base.Animal_Brain_Small;Base.MeatPatty;Base.GroundMeat,
+	type = string, default = Base.ZombieMeat;Base.zSubstance;Base.Steak;Base.Smallbirdmeat;Base.Smallanimalmeat;Base.Rabbitmeat;Base.MincedMeat;Base.FrogMeat;Base.CorpseAnimal;Base.Specimen_Brain;Base.Animal_Brain;Base.Animal_Brain_Small;Base.MeatPatty;Base.GroundMeat,
     page = vTrait, translation = vTrait_FoodList,
 }
 option vTrait.DisableDrink

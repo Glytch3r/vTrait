@@ -68,7 +68,7 @@ function vTrait.applyHeal(pl, bp)
     if bp:getStiffness() > 0 then
         bp:setStiffness(math.max(0, bp:getStiffness() - healRate))
     end
-    pl:AddGeneralHealth(vTrait.getHealthRecoveryRate())
+    pl:getBodyDamage():AddGeneralHealth(vTrait.getHealthRecoveryRate())
     
 end
 
@@ -83,6 +83,6 @@ function vTrait.RecoveryHandler(pl, dmgType, dmg)
     end
 end
 Events.OnPlayerGetDamage.Add(vTrait.RecoveryHandler)
-Events.EveryTenMinutes.Add(vTrait.RecoveryHandler)
+Events.EveryOneMinute.Add(vTrait.RecoveryHandler)
 
 

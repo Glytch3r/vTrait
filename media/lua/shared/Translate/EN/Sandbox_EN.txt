@@ -49,6 +49,14 @@ Sandbox_EN = {
     Sandbox_vTrait_HealthRecoveryRate_tooltip = "The amount of general health recovery applied every healing tick.",
 
 
+    Sandbox_vTrait_HealthRecoveryRate = "Health Recovery Rate",
+    Sandbox_vTrait_HealthRecoveryRate_tooltip = "The amount of general health recovery applied every healing tick.",
+
+
+    Sandbox_vTrait_InjuryHealChance = "Injury Heal Chance",
+    Sandbox_vTrait_InjuryHealChance_tooltip = "Chance to trigger a heal every 10 mins.",
+
+
     Sandbox_vTrait_HitRecoverChance = "Health Recovery Chance",
     Sandbox_vTrait_HitRecoverChance_tooltip = "Percent chance to trigger Hit Recovery.",
 
