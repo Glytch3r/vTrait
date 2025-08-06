@@ -45,25 +45,28 @@ function vTrait.click()
 	local unarmed = vTrait.isUnarmed(pl)
     if not unarmed then return end
 
-	pl:getModData()['vTrait'] = pl:getModData()['vTrait'] or {}
-    local md = pl:getModData()['vTrait']
-	md.isAttacking = md.isAttacking or false
-    if md.isAttacking then return end
-	md.isAttacking = true
+
+	pl:setAuthorizeMeleeAction(not unarmed)
+
+
+	--addSound(pl, pl:getX(), pl:getY(), pl:getZ(), 5, 1)
+--[[ 
+	pl:playEmote("vBite")
 	pl:setAuthorizeMeleeAction(false)
 	pl:setIgnoreMovement(true)	
-	
-	addSound(pl, pl:getX(), pl:getY(), pl:getZ(), 5, 1)
-	pl:playEmote("vBite")
-
-	timer:Simple(1.3, function()
-		pl:playEmote("idle")
+	timer:Simple(1, function()
+		--pl:playEmote("idle")
 		md.isAttacking = false
 		pl:setIgnoreMovement(false)
 		pl:setAuthorizeMeleeAction(true)		
 	end)
 	vTrait.doBite(pl)
-	
+ ]]
+
+	local sq = pl:getCurrentSquare() 
+	local adj = sq:getAdjacentSquare(pl:getDir())
+	ISTimedActionQueue.add(vTrait_BiteAction:new(pl, adj,50))
+
 end
 
 function vTrait.doBite(pl)

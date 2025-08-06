@@ -28,7 +28,9 @@ vTrait_BiteAction = ISBaseTimedAction:derive("vTrait_BiteAction")
 
 function vTrait_BiteAction:isValid()
     local csq = self.pl:getCurrentSquare()
-    return not self.sq:isBlockedTo(csq)
+    local valid = not self.sq:isBlockedTo(csq)
+   
+    return valid
 end
 
 --[[ function vTrait_BiteAction:waitToStart()
@@ -40,9 +42,9 @@ function vTrait_BiteAction:update()
 end
 
 function vTrait_BiteAction:start()
-
+    self:setActionAnim('vBite')
    -- self.pl:setVariable("V_BiteAction", true)
-	self.pl:setVariable("PerformingAction", "bite")
+	--self.pl:setVariable("PerformingAction", "vBite")
 	--print("V_BiteAction")
 end
 
@@ -70,7 +72,6 @@ function vTrait_BiteAction:animEvent(event, parameter)
 end
 
 function vTrait_BiteAction:stop()
-
     ISBaseTimedAction.stop(self)
 end
 
@@ -87,11 +88,9 @@ function vTrait_BiteAction:new(pl, sq, maxTime)
     o.stopOnWalk = true
     o.stopOnRun = true
     o.stopOnAim = false
-    o.maxTime = maxTime or 10
+    o.maxTime = maxTime or 120
     return o
 end
-
-
 
 
 

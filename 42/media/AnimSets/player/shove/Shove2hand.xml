@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <animNode x_extends="ShoveDefault.xml">
 	<m_Name>Shove2hand</m_Name>
-	<m_AnimName>Zombie_Bite</m_AnimName>
+	<m_AnimName>vBite</m_AnimName>
 	<m_EarlyTransitionOut>true</m_EarlyTransitionOut>
 	<m_Conditions />
 	<m_Conditions>

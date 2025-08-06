@@ -2,7 +2,7 @@
 <animNode>
 	<m_Name>V_GrappleGrab</m_Name>
 	<m_Priority>4</m_Priority>
-	<m_AnimName>Zombie_Bite</m_AnimName>
+	<m_AnimName>vBite</m_AnimName>
 	<m_Looped>false</m_Looped>
 	<m_BlendTime>0.20</m_BlendTime>
 	<m_SpeedScale>0.80</m_SpeedScale>

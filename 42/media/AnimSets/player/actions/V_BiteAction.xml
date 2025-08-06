@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animNode>
     <m_Name>V_BiteAction</m_Name>
-    <m_AnimName>Zombie_Bite</m_AnimName>
-    <m_Priority>4</m_Priority>
+    <m_AnimName>vBite</m_AnimName>
+    <m_Priority>5</m_Priority>
     <m_deferredBoneAxis>Y</m_deferredBoneAxis>
     <m_Looped>false</m_Looped>
     <m_EarlyTransitionOut>true</m_EarlyTransitionOut>
-    <m_SpeedScale>1.25</m_SpeedScale>
+    <m_SpeedScale>5</m_SpeedScale>
     <m_BlendTime>0.15</m_BlendTime>
     <m_BlendOutTime>0.35</m_BlendOutTime>
 
@@ -16,6 +16,11 @@
 		<m_BoolValue>true</m_BoolValue>
 	</m_Conditions>
 
+	<m_Conditions>
+		<m_Name>PerformingAction</m_Name>
+		<m_Type>STRING</m_Type>
+		<m_StringValue>vBite</m_StringValue>
+	</m_Conditions>
 
     <m_Transitions>
         <m_Target>Idle</m_Target>
@@ -27,7 +32,7 @@
 
     <m_Events>
         <m_EventName>AttackCollisionCheck</m_EventName>
-        <m_TimePc>0.25</m_TimePc>
+        <m_TimePc>0.15</m_TimePc>
     </m_Events>
     <m_Events>
         <m_EventName>BlockMovement</m_EventName>
@@ -48,8 +53,31 @@
 		<m_TimePc>0.1</m_TimePc>
 		<m_ParameterValue>ZombieHitReaction=Chainsaw</m_ParameterValue>
 	</m_Events>
-
-    <m_SubStateBoneWeights>
+	<m_SubStateBoneWeights>
+		<boneName>Bip01_Spine1</boneName>
+	</m_SubStateBoneWeights>
+	<m_SubStateBoneWeights>
+		<boneName>Bip01_Neck</boneName>
+	</m_SubStateBoneWeights>
+	<m_SubStateBoneWeights>
+		<boneName>Bip01_BackPack</boneName>
+	</m_SubStateBoneWeights>
+	<m_SubStateBoneWeights>
+		<boneName>Bip01_Prop1</boneName>
+	</m_SubStateBoneWeights>
+	<m_SubStateBoneWeights>
+		<boneName>Bip01_Prop2</boneName>
+	</m_SubStateBoneWeights>
+	<m_SubStateBoneWeights>
+		<boneName>Bip01_Spine</boneName>
+		<weight>0.40</weight>
+		<includeDescendants>false</includeDescendants>
+	</m_SubStateBoneWeights>
+	<m_SubStateBoneWeights>
+		<boneName>Bip01</boneName>
+		<weight>0.20</weight>
+	</m_SubStateBoneWeights>
+<!--     <m_SubStateBoneWeights>
         <boneName>Bip01_Spine1</boneName>
     </m_SubStateBoneWeights>
     <m_SubStateBoneWeights>
@@ -65,4 +93,11 @@
         <boneName>Bip01_Spine</boneName>
         <includeDescendants>false</includeDescendants>
     </m_SubStateBoneWeights>
+
+	<m_SubStateBoneWeights>
+		<boneName>Dummy01</boneName>
+	</m_SubStateBoneWeights>
+	<m_SubStateBoneWeights>
+		<boneName>Translation_Data</boneName>
+	</m_SubStateBoneWeights> -->
 </animNode>
