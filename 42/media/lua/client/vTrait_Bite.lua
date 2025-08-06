@@ -31,29 +31,72 @@ function vTrait.isUnarmed(pl)
     return (wType and tostring(wType) == "barehand") or (wpn and wpn:getCategories():contains("Unarmed"))
 end
 
+
+
 function vTrait.click()
-    if not isIngameState() then return end
-
+   if not isIngameState() then return end
     local pl = getPlayer()
+
     if not pl or not pl:HasTrait("V") then return end
+    if not pl:isAlive() then return end
+    if not pl:isAiming() then return end
+	if pl:isLookingWhileInVehicle() then return end
+
 	local unarmed = vTrait.isUnarmed(pl)
+    if not unarmed then return end
 
-	pl:setAuthorizeMeleeAction(true)
-	pl:playEmote('V_BiteAction')
+	pl:getModData()['vTrait'] = pl:getModData()['vTrait'] or {}
+    local md = pl:getModData()['vTrait']
+	md.isAttacking = md.isAttacking or false
+    if md.isAttacking then return end
+	md.isAttacking = true
+	pl:setAuthorizeMeleeAction(false)
+	pl:setIgnoreMovement(true)	
+	
+	addSound(pl, pl:getX(), pl:getY(), pl:getZ(), 5, 1)
+	pl:playEmote("vBite")
+
+	timer:Simple(1.3, function()
+		pl:playEmote("idle")
+		md.isAttacking = false
+		pl:setIgnoreMovement(false)
+		pl:setAuthorizeMeleeAction(true)		
+	end)
+	vTrait.doBite(pl)
+	
+end
+
+function vTrait.doBite(pl)
+	pl = pl or getPlayer()
+    if not pl or not pl:HasTrait("V") then return false end	
     local sq = pl:getSquare()
-    if not sq then return end
+    if not sq then return false end
     local adj = sq:getAdjacentSquare(pl:getDir())
-    if not adj then return end
+    if not adj then return false end
 
-    if unarmed then
-        pl:setInitiateAttack(false)
-        ISTimedActionQueue.add(vTrait_BiteAction:new(pl, adj, 10))
-    end
+	 if vTrait.isMultiHit() then
+		for i = 1, adj:getMovingObjects():size() do
+			local zed = adj:getMovingObjects():get(i - 1)
+			if vTrait.isValidZed(zed) then
+				vTrait.doDmg(zed)
+			end
+		end
+	else
+		for i = 1, adj:getMovingObjects():size() do
+			local zed = adj:getMovingObjects():get(i - 1)
+			if vTrait.isValidZed(zed) then
+				vTrait.doDmg(zed)
+				break
+			end
+		end
+	end
+
+	return true    
 end
 Events.OnMouseUp.Add(vTrait.click)
 
 function vTrait.isMultiHit()
-    return getSandboxOptions():getOptionByName("MultiHitZombies")
+    return getSandboxOptions():getOptionByName("MultiHitZombies"):getValue()
 end
 
 function vTrait.isValidZed(zed)

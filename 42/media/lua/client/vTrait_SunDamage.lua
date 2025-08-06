@@ -49,7 +49,7 @@ function vTrait.isShouldBurn(targ)
     if not (targ and targ:isAlive() and targ:HasTrait("V")) then return false end
     if not vTrait.isDay() or RainManager:isRaining() then return false end
     local csq = targ:getCurrentSquare()
-    return csq and csq:isOutside()
+    return csq and csq:isOutside() and not csq:haveRoofFull()
 end
 
 function vTrait.getSmokeColor(index, alpha)
