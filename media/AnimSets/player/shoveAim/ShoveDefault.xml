@@ -1,27 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <animNode>
-	<m_Name>V_ShoveDefault</m_Name>
+	<m_Name>ShoveDefault</m_Name>
 	<m_Priority>4</m_Priority>
-	<m_AnimName>vBite</m_AnimName>
 	<m_Looped>false</m_Looped>
 	<m_BlendTime>0.20</m_BlendTime>
 	<m_EarlyTransitionOut>true</m_EarlyTransitionOut>
 	<m_SpeedScale>0.80</m_SpeedScale>
 	<m_SyncTrackingEnabled>false</m_SyncTrackingEnabled>
-	<m_Conditions>
-		<m_Name>isV</m_Name>
-		<m_Type>BOOL</m_Type>
-		<m_BoolValue>true</m_BoolValue>
-	</m_Conditions> 
-	<m_Conditions x_name="06d43068-7150-4a32-a6d7-f75181d6cf40">
-		<m_Name>isStompAnim</m_Name>
-		<m_Type>BOOL</m_Type>
-		<m_Value>false</m_Value>
-	</m_Conditions>
 	<m_Events x_name="88162c23-c742-4b4a-aa59-ad5bd1298a77">
 		<m_EventName>AttackCollisionCheck</m_EventName>
 		<m_TimePc>0.15</m_TimePc>
-		<m_ParameterValue></m_ParameterValue>
+		<m_ParameterValue>Shove</m_ParameterValue>
 	</m_Events>
 	<m_Events x_name="a2063a94-632d-46b2-8556-2d0dd8ba3e74">
 		<m_EventName>ShoveAnim</m_EventName>

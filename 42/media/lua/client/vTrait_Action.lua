@@ -27,10 +27,7 @@ require "TimedActions/ISBaseTimedAction"
 vTrait_BiteAction = ISBaseTimedAction:derive("vTrait_BiteAction")
 
 function vTrait_BiteAction:isValid()
-    local csq = self.pl:getCurrentSquare()
-    local valid = not self.sq:isBlockedTo(csq)
-   
-    return valid
+    return not self.pl:isAimAtFloor() and self.pl:isAiming()
 end
 
 --[[ function vTrait_BiteAction:waitToStart()
@@ -71,6 +68,7 @@ function vTrait_BiteAction:animEvent(event, parameter)
     end
 end
 
+
 function vTrait_BiteAction:stop()
     ISBaseTimedAction.stop(self)
 end
@@ -85,9 +83,10 @@ function vTrait_BiteAction:new(pl, sq, maxTime)
     o.pl = pl
     o.character = pl
     o.sq = sq
-    o.stopOnWalk = true
-    o.stopOnRun = true
+    o.stopOnWalk = false
+    o.stopOnRun = false
     o.stopOnAim = false
+    o.useProgressBar = false 
     o.maxTime = maxTime or 120
     return o
 end

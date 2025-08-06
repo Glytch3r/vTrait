@@ -47,7 +47,7 @@ end
 
 function vTrait.applyHeal(pl, bp)
     if not pl:HasTrait("V") then return end
-
+    
     local healRate = vTrait.getInjuryRecoveryRate()
 
     if bp:getScratchTime() > 0 then

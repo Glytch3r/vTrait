@@ -21,7 +21,6 @@
 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■--]]
 
 
-
 vTrait = vTrait or {}
 
 function vTrait.isUnarmed(pl)
@@ -31,53 +30,31 @@ function vTrait.isUnarmed(pl)
     return (wType and tostring(wType) == "barehand") or (wpn and wpn:getCategories():contains("Unarmed"))
 end
 
-
-
 function vTrait.click()
-   if not isIngameState() then return end
+    if not isIngameState() then return end
     local pl = getPlayer()
 
     if not pl or not pl:HasTrait("V") then return end
     if not pl:isAlive() then return end
-    if not pl:isAiming() then return end
-	if pl:isLookingWhileInVehicle() then return end
-
-	local unarmed = vTrait.isUnarmed(pl)
+    if not pl:isAiming() or pl:isAimAtFloor() then return end
+    if pl:isLookingWhileInVehicle() then return end
+    local unarmed = vTrait.isUnarmed(pl)
     if not unarmed then return end
-
-
-	pl:setAuthorizeMeleeAction(not unarmed)
-
-
-	--addSound(pl, pl:getX(), pl:getY(), pl:getZ(), 5, 1)
---[[ 
-	pl:playEmote("vBite")
-	pl:setAuthorizeMeleeAction(false)
-	pl:setIgnoreMovement(true)	
-	timer:Simple(1, function()
-		--pl:playEmote("idle")
-		md.isAttacking = false
-		pl:setIgnoreMovement(false)
-		pl:setAuthorizeMeleeAction(true)		
-	end)
-	vTrait.doBite(pl)
- ]]
-
-	local sq = pl:getCurrentSquare() 
-	local adj = sq:getAdjacentSquare(pl:getDir())
-	ISTimedActionQueue.add(vTrait_BiteAction:new(pl, adj,50))
-
+    --pl:setAuthorizeMeleeAction(not unarmed)
+	
+    local sq = pl:getCurrentSquare()
+    local adj = sq and sq:getAdjacentSquare(pl:getDir())
+    if adj then
+		vTrait.vAttack(adj)
+        --ISTimedActionQueue.add(vTrait_BiteAction:new(pl, adj, 50))
+    end
 end
+Events.OnMouseDown.Remove(vTrait.click)
+--Events.OnMouseDown.Add(vTrait.click)
 
-function vTrait.doBite(pl)
-	pl = pl or getPlayer()
-    if not pl or not pl:HasTrait("V") then return false end	
-    local sq = pl:getSquare()
-    if not sq then return false end
-    local adj = sq:getAdjacentSquare(pl:getDir())
-    if not adj then return false end
-
-	 if vTrait.isMultiHit() then
+function vTrait.vAttack(adj)
+	if not adj then return end
+	if vTrait.isMultiHit() then
 		for i = 1, adj:getMovingObjects():size() do
 			local zed = adj:getMovingObjects():get(i - 1)
 			if vTrait.isValidZed(zed) then
@@ -93,10 +70,116 @@ function vTrait.doBite(pl)
 			end
 		end
 	end
-
-	return true    
 end
-Events.OnMouseUp.Add(vTrait.click)
+
+
+--[[ 
+function vTrait.done(pl, wpn)
+	if pl and  vTrait.isUnarmed(pl) and  pl:HasTrait("V")  then
+		pl:setAuthorizeMeleeAction(true)		
+	end
+end
+Events.OnPlayerAttackFinished.Remove(vTrait.done)
+Events.OnPlayerAttackFinished.Add(vTrait.done)
+
+ ]]
+function vTrait.getTSq(pl)
+    pl = pl or getPlayer()
+
+    local result = {}
+    local csq = pl:getCurrentSquare()
+    if not csq then return result end
+
+    table.insert(result, csq)
+
+    local adj = csq:getAdjacentSquare(pl:getDir())
+    if not adj then return result end
+    table.insert(result, adj)
+
+    local dir = pl:getDir()
+    local leftDir, rightDir
+
+    if dir == IsoDirections.N then
+        leftDir, rightDir = IsoDirections.W, IsoDirections.E
+    elseif dir == IsoDirections.S then
+        leftDir, rightDir = IsoDirections.E, IsoDirections.W
+    elseif dir == IsoDirections.E then
+        leftDir, rightDir = IsoDirections.N, IsoDirections.S
+    elseif dir == IsoDirections.W then
+        leftDir, rightDir = IsoDirections.S, IsoDirections.N
+    end
+
+    local leftSq = adj:getAdjacentSquare(leftDir)
+    if leftSq then table.insert(result, leftSq) end
+
+    local rightSq = adj:getAdjacentSquare(rightDir)
+    if rightSq then table.insert(result, rightSq) end
+
+    return result
+end
+
+function vTrait.doBite(pl)
+    pl = pl or getPlayer()
+    if not pl or not pl:HasTrait("V") then return false end    
+
+    local csq = pl:getCurrentSquare()
+    if not csq then return false end
+
+    local adj = csq:getAdjacentSquare(pl:getDir())
+    if not adj then return false end
+
+    local squares = vTrait.getTSq(pl)
+
+    if vTrait.isMultiHit() then
+        for _, tsq in ipairs(squares) do
+            for i = 1, tsq:getMovingObjects():size() do
+                local zed = tsq:getMovingObjects():get(i - 1)
+                if vTrait.isValidZed(zed) and not tsq:isBlockedTo(csq) then
+                    vTrait.doDmg(zed, csq)
+                end
+            end
+        end
+    else
+        local check = false
+        for i = 1, adj:getMovingObjects():size() do
+            local zed = adj:getMovingObjects():get(i - 1)
+            if vTrait.isValidZed(zed) and not adj:isBlockedTo(csq) then
+                vTrait.doDmg(zed, csq)
+                check = true
+                break
+            end
+        end
+
+        if not check then
+            for _, tsq in ipairs(squares) do
+                if check then break end
+                for i = 1, tsq:getMovingObjects():size() do
+                    local zed = tsq:getMovingObjects():get(i - 1)
+                    if vTrait.isValidZed(zed) and not tsq:isBlockedTo(csq) then
+                        vTrait.doDmg(zed, csq)
+                        check = true
+                        break
+                    end
+                end
+            end
+        end
+    end
+    return true    
+end
+
+function vTrait.zHit(zed, pl, bp, wpn)
+	if not pl or not pl:HasTrait("V") then return end
+    if not zed:isAlive() then return end
+    if not pl:isAlive() then return end
+    --if not pl:isAiming() or pl:isAimAtFloor() then return end
+    --if pl:isLookingWhileInVehicle() then return end
+    local unarmed = vTrait.isUnarmed(pl)
+    if not unarmed then return end
+	vTrait.doDmg(zed)
+	
+end
+Events.OnHitZombie.Remove(vTrait.zHit)
+Events.OnHitZombie.Add(vTrait.zHit)
 
 function vTrait.isMultiHit()
     return getSandboxOptions():getOptionByName("MultiHitZombies"):getValue()
@@ -109,28 +192,43 @@ end
 function vTrait.isTargOnFloor(zed)
     return zed:isOnFloor() or zed:isUnderVehicle() or zed:isSitAgainstWall() or zed:isBeingSteppedOn()
 end
+function vTrait.doDmg(zed, csq)
+    local pl = getPlayer()
+    if not (pl and zed) then return end
+
+    local hp = zed:getHealth()
+    local dmg = ZombRand(1, hp) 
+
+    triggerEvent("OnWeaponHitCharacter", pl, zed, nil, dmg)
+    zed:setHealth(math.max(0, hp - dmg))
+    zed:setAttackedBy(pl)
+
+    local newHp = zed:getHealth()
+    if getCore():getDebug() then
+        zed:addLineChatElement("HP: " .. tostring(newHp))
+    end
+
+    if newHp <= 0 then
+        zed:Kill(pl) 
+		zed:becomeCorpse(zed)
+        return
+    end
+	--zed:setStaggerBack(false);
+	zed:setKnockedDown(true);
+	--zed:setOnFloor(true);
+	--zed:setFallOnFront(true);
+	zed:setHitReaction("FenceWindow");
+--[[     if vTrait.doRoll and vTrait.doRoll(90) then
+        zed:setHitReaction("")
+    else
+        zed:setKnockedDown(true)
+    end ]]
+end
 
 function vTrait.doRoll(percent)
     if percent <= 0 then return false end
     if percent >= 100 then return true end
     return percent >= ZombRand(1, 101)
-end
-
-function vTrait.doDmg(zed)
-    local pl = getPlayer()
-    if pl and zed then
-        local dmg = ZombRand(0, zed:getHealth())
-        triggerEvent("OnWeaponHitCharacter", pl, zed, nil, dmg)
-        zed:setHealth(dmg)
-        zed:setAttackedBy(pl)
-        if not zed:isDead() then
-            if vTrait.doRoll(50) then
-                zed:setHitReaction("")
-            else
-                zed:setKnockedDown(true)
-            end
-        end
-    end
 end
 
 -----------------------            ---------------------------
