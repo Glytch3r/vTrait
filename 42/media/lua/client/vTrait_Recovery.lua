@@ -72,8 +72,8 @@ function vTrait.applyHeal(pl, bp)
     
 end
 
-function vTrait.RecoveryHandler()
-    local pl = getPlayer()
+function vTrait.RecoveryHandler(pl, dmgType, dmg)
+    pl = pl or getPlayer()
     if not pl or not pl:HasTrait("V") then return end
 
     local bd = pl:getBodyDamage()
@@ -82,4 +82,7 @@ function vTrait.RecoveryHandler()
         vTrait.applyHeal(pl, bp)
     end
 end
-Events.EveryOneMinute.Add(RecoveryHandler)
+Events.OnPlayerGetDamage.Add(vTrait.RecoveryHandler)
+Events.EveryTenMinutes.Add(vTrait.RecoveryHandler)
+
+

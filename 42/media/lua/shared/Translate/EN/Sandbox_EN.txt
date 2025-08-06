@@ -55,7 +55,11 @@ Sandbox_EN = {
     Sandbox_vTrait_HitRecoveryPercent = "Hit Recover Percent",
     Sandbox_vTrait_HitRecoveryPercent_tooltip = "The amount of damage recovered after getting hit.",
 
+    Sandbox_vTrait_InjuryHealOverheadMessage = "Injury Heal Overhead Message",
+    Sandbox_vTrait_InjuryHealOverheadMessage_tooltip = "Displays a floating text above the player while healing injuries",
 
+    Sandbox_vTrait_CureInfection = "Chance to Cure infection every hour",
+    Sandbox_vTrait_CureInfection_tooltip = "Hourly Chance to heal injury can also cure infection",
 
     Sandbox_vTrait_SunDamage = "Sun Damage",
     Sandbox_vTrait_SunDamage_tooltip = "Damage done to Vs when they are exposed to the sun. Set to 0 to disable feature",

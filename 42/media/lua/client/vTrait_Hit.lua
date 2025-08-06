@@ -35,7 +35,7 @@ end
 
 function vTrait.defense(pl, dmgType, dmg)
 	pl = pl or getPlayer()
-	if tostring(dmgType) == "WEAPONHIT" and pl == getPlayer() and  pl:HasTrait("V")  then
+	if pl and pl:HasTrait("V")   then
 		local chance = SandboxVars.vTrait.HitRecoverChance or 25
 		if vTrait.doRoll(chance) then			
 			local recov = vTrait.getHitRecoveryPercent(dmg)

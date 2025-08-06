@@ -75,6 +75,21 @@ option vTrait.HitRecoveryPercent
     type = double, default = 30, min = 0, max = 100,
     page = vTrait, translation = vTrait_HitRecoveryPercent,
 }
+option vTrait.HourlyInjuryHealChance
+{
+    type = double, default = 50, min = 0, max = 100,
+    page = vTrait, translation = vTrait_HourlyInjuryHealChance,
+}
+option vTrait.InjuryHealOverheadMessage 
+{
+    type = boolean, default = true,
+    page = vTrait, translation = vTrait_InjuryHealOverheadMessage,
+}
+option vTrait.CureInfection
+{
+    type = boolean, default = false,
+    page = vTrait, translation = vTrait_CureInfection,
+}
 
 
 option vTrait.SunDamage 
