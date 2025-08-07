@@ -85,7 +85,7 @@ function vTrait.collectHealable(pl)
 
         if part:bitten() then
             table.insert(healable, { part = part, label = "Bitten", func = function(p)
-                p:setBitten(false)
+                p:SetBitten(false)
                 if SandboxVars.vTrait.CureInfection then
                     p:setInfected(false)
                     p:setFakeInfected(false)
