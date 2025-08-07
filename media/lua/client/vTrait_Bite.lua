@@ -200,9 +200,14 @@ function vTrait.doDmg(zed, csq)
     local dmg = ZombRand(1, hp) 
 
     triggerEvent("OnWeaponHitCharacter", pl, zed, nil, dmg)
-    zed:setHealth(math.max(0, hp - dmg))
-    zed:setAttackedBy(pl)
 
+    zed:setAttackedBy(pl)
+	if vTrait.doRoll(40) then
+		zed:Kill(pl) 
+		zed:becomeCorpse(zed)
+		return
+	end
+    zed:setHealth(math.max(0, hp - dmg))
     local newHp = zed:getHealth()
     if getCore():getDebug() then
         zed:addLineChatElement("HP: " .. tostring(newHp))

@@ -49,7 +49,7 @@ function vTrait.applyHeal(pl, bp)
     if not pl:HasTrait("V") then return end
     
     local healRate = vTrait.getInjuryRecoveryRate()
-
+    
     if bp:getScratchTime() > 0 then
         bp:setScratchTime(math.max(0, bp:getScratchTime() - healRate))
     end
@@ -68,6 +68,10 @@ function vTrait.applyHeal(pl, bp)
     if bp:getStiffness() > 0 then
         bp:setStiffness(math.max(0, bp:getStiffness() - healRate))
     end
+    if bp:getAdditionalPain() > 0 then
+        bp:setAdditionalPain(math.max(0, bp:getAdditionalPain() - healRate))
+    end
+    
     pl:getBodyDamage():AddGeneralHealth(vTrait.getHealthRecoveryRate())
     
 end
@@ -75,14 +79,15 @@ end
 function vTrait.RecoveryHandler(pl, dmgType, dmg)
     pl = pl or getPlayer()
     if not pl or not pl:HasTrait("V") then return end
-
+    
     local bd = pl:getBodyDamage()
+    bd:setFoodSicknessLevel(0)
+    bd:setPoisonLevel(0) 
     for i = 0, BodyPartType.ToIndex(BodyPartType.MAX) - 1 do
         local bp = bd:getBodyPart(BodyPartType.FromIndex(i))
-        vTrait.applyHeal(pl, bp)
+        vTrait.applyHeal(pl, bp)        
     end
 end
 Events.OnPlayerGetDamage.Add(vTrait.RecoveryHandler)
 Events.EveryOneMinute.Add(vTrait.RecoveryHandler)
-
 

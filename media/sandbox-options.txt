@@ -75,6 +75,12 @@ option vTrait.HitRecoveryPercent
     type = double, default = 30, min = 0, max = 100,
     page = vTrait, translation = vTrait_HitRecoveryPercent,
 }
+option vTrait.HPRestoreAmount 
+{
+    type = double, default = 10, min = 0, max = 100,
+    page = vTrait, translation = vTrait_HPRestoreAmount,
+}
+
 option vTrait.InjuryHealChance
 {
     type = double, default = 50, min = 0, max = 100,

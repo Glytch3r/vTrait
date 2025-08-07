@@ -29,10 +29,10 @@ function vTrait.getFoodList()
     end
     return items
 end
+
 function vTrait.context(player, context, items)
     local pl = getSpecificPlayer(player)
     local hasTrait = pl:HasTrait("V")
-
     local foodTable = vTrait.getFoodList()
     local item
 
@@ -46,44 +46,58 @@ function vTrait.context(player, context, items)
         item = items
     end
 
-    if item and instanceof(item, "InventoryItem") then
-        local fType = item:getFullType()
+    if not item or not instanceof(item, "InventoryItem") then return end
 
-        if fType == "Base.ZombieBlood" or fType == "Base.zSubstance" then
+    local fType = item:getFullType()
+
+    if fType == "Base.ZombieBlood" or fType == "Base.zSubstance" then
+        item:setPoisonPower(hasTrait and 0 or 1)
+    end
+
+    if item:IsFood() then
+        local isOnList = foodTable[fType] == true
+
+        if isOnList then
+            local scriptItem = ScriptManager.instance:getItem(fType)
+            local defaultDanger = scriptItem and scriptItem:isDangerousUncooked() or false
+
             if hasTrait then
-                item:setPoisonPower(0)
+                if item.isDangerousUncooked and item:isDangerousUncooked() then
+                    item:setDangerousUncooked(false)
+                end
             else
-                item:setPoisonPower(1)
+                if item.isDangerousUncooked and not item:isDangerousUncooked() and defaultDanger then
+                    item:setDangerousUncooked(true)
+                end
             end
         end
+    end
 
-        if hasTrait then
-            local isDrinkDisabled = SandboxVars.vTrait.DisableDrink ~= false
-            local isEatDisabled = SandboxVars.vTrait.DisableEat ~= false
+    if hasTrait then
+        local isDrinkDisabled = SandboxVars.vTrait.DisableDrink ~= false
+        local isEatDisabled = SandboxVars.vTrait.DisableEat ~= false
 
-            local disableOptions = {}
+        local disableOptions = {}
 
-            if isDrinkDisabled then
-                table.insert(disableOptions, getText("ContextMenu_Drink"))
-            end
+        if isDrinkDisabled then
+            table.insert(disableOptions, getText("ContextMenu_Drink"))
+        end
+        if isEatDisabled then
+            table.insert(disableOptions, getText("ContextMenu_Eat"))
+            table.insert(disableOptions, getText("ContextMenu_Eat_All"))
+            table.insert(disableOptions, getText("ContextMenu_Eat_Quarter"))
+            table.insert(disableOptions, getText("ContextMenu_Eat_Half"))
+            table.insert(disableOptions, getText("ContextMenu_Take_pills"))
+        end
 
-            if isEatDisabled then
-                table.insert(disableOptions, getText("ContextMenu_Eat"))
-                table.insert(disableOptions, getText("ContextMenu_Eat_All"))
-                table.insert(disableOptions, getText("ContextMenu_Eat_Quarter"))
-                table.insert(disableOptions, getText("ContextMenu_Eat_Half"))
-                table.insert(disableOptions, getText("ContextMenu_Take_pills"))
-            end
-
-            if not foodTable[fType] then
-                for i = #context.options, 1, -1 do
-                    local option = context.options[i]
-                    for _, name in ipairs(disableOptions) do
-                        if option.name == name then
-                            option.notAvailable = true
-                            option.toolTip = ISInventoryPaneContextMenu.addToolTip()
-                            option.toolTip.description = "Disabled by V Trait"
-                        end
+        if not foodTable[fType] or not item:IsFood() then
+            for i = #context.options, 1, -1 do
+                local option = context.options[i]
+                for _, name in ipairs(disableOptions) do
+                    if option.name == name then
+                        option.notAvailable = true
+                        option.toolTip = ISInventoryPaneContextMenu.addToolTip()
+                        option.toolTip.description = "Disabled by V Trait"
                     end
                 end
             end
@@ -92,6 +106,7 @@ function vTrait.context(player, context, items)
 end
 
 Events.OnFillInventoryObjectContextMenu.Add(vTrait.context)
+
 
 
 --[[_____________________________________________________________________________________________________________________________

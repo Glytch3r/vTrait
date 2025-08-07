@@ -28,6 +28,15 @@ function vTrait.hasAnyInjury(pl)
     for i = 0, bodyParts:size() - 1 do
         local bp = bodyParts:get(i)
         if bp:HasInjury()
+            or bp:isDeepWounded() 
+            or bp:bitten()
+            or bp:bleeding()
+            or bp:isInfectedWound()
+            or bp:getFractureTime() > 0
+            or bp:getBurnTime() > 0
+            or bp:haveBullet()
+            or bp:haveGlass()
+            or bp:isCut()
             or bp:bandaged()
             or bp:stitched()
             or bp:getSplintFactor() > 0
@@ -139,8 +148,13 @@ end
 
 function vTrait.HealRandPart()
     local pl = getPlayer()
-    if not pl:HasTrait("V") then return end
+    if not pl or not pl:HasTrait("V") then return end
+    local healAmount = SandboxVars.vTrait.HPRestoreAmount or 1 
 
+    local bd = pl:getBodyDamage()
+	if pl:getMoodles():getMoodleLevel(MoodleType.Pain) > 3 then
+        bd:AddGeneralHealth(healAmount*2)        
+    end
     while vTrait.doRoll(SandboxVars.vTrait.InjuryHealChance) do
         local healable = vTrait.collectHealable(pl)
 
@@ -153,10 +167,11 @@ function vTrait.HealRandPart()
                 pl:addLineChatElement(msg)
             end
         else
-            local bd = pl:getBodyDamage()
             local currentHp = bd:getOverallBodyHealth()
             local healAmount = SandboxVars.vTrait.HPRestoreAmount or 1 
-            bd:setOverallBodyHealth(math.min(100, currentHp + healAmount))
+            --bd:setOverallBodyHealth(math.min(100, currentHp + healAmount))
+
+            bd:AddGeneralHealth(healAmount)
 
             if SandboxVars.vTrait.InjuryHealOverheadMessage == true then
                 pl:addLineChatElement("[vTrait] Restored Health +" .. tostring(healAmount))
@@ -171,4 +186,6 @@ function vTrait.HealRandPart()
     return true
 end
 
-Events.EveryTenMinutes.Add(vTrait.HealRandPart)
+Events.EveryOneMinute.Add(vTrait.HealRandPart)
+--Events.EveryTenMinutes.Add(vTrait.HealRandPart)
+

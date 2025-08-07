@@ -15,6 +15,14 @@
 vTrait = vTrait or {}
 local defaultSpeed = 1.04
 local sOpt = SandboxVars.vTrait
+print(sOpt.isSpeedHungerBonus)
+print(sOpt.vSpeedPeakDebuff)
+print(sOpt.vSpeedBonus)
+print(sOpt.vSpeedMax)
+print(sOpt.vSpeedMin)
+print(sOpt.vSpeedAccelerationRate)
+print(sOpt.PreventSpeed)
+
 
 vTrait.velocity = 0 
 
@@ -47,7 +55,6 @@ function vTrait.getTargetSpeed(pl)
     if pl:isSneaking() or pl:isAiming() then return 0 end
 
 
-
     if pl:isSprinting() or pl:isRunning() then
         local sprintLevel = pl:getPerkLevel(Perks.Sprinting)
         local baseSpeed = defaultSpeed + (defaultSpeed * 2) + sOpt.vSpeedBonus * sprintLevel
@@ -65,7 +72,7 @@ function vTrait.speedHandler(pl)
     elseif targetSpeed < vTrait.velocity then
         vTrait.velocity = math.max(0, vTrait.velocity - sOpt.vSpeedAccelerationRate*2)
     end
-    pl:setVariable("vSpeed", vTrait.velocity)
+    --pl:setVariable("vSpeed", vTrait.velocity)
     
 end
 Events.OnPlayerUpdate.Add(vTrait.speedHandler)
@@ -80,7 +87,6 @@ function vTrait.doMove(x, y)
 
     if not vTrait.isBlocked(pl) then 
 
-        --print(vTrait.velocity)
         pl:setX(pl:getX() + (step * x))
         pl:setY(pl:getY() + (step * y))
 
@@ -116,10 +122,11 @@ Events.OnKeyKeepPressed.Add(vTrait.speedKey)
 
 function vTrait.isBlocked(pl)
     pl = pl or getPlayer()
-    if not pl then return end 
+    if not pl then return false end 
     local csq = pl:getCurrentSquare() 
+    if not csq then return false end
     local adj = csq:getAdjacentSquare(pl:getDir());
-
+    if not adj then return false end
     local blocked = adj:isBlockedTo(csq)
     return blocked
 end
