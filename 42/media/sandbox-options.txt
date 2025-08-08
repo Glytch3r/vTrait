@@ -49,43 +49,19 @@ option vTrait.isHealHungerBonus
     type = boolean, default = false,
     page = vTrait, translation = vTrait_isHealHungerBonus,
 }
-option vTrait.RecoverRateMin 
+option vTrait.RecoverRate
 {
-    type = double, default = 0.005, min = 0, max = 1,
-    page = vTrait, translation = vTrait_RecoverRateMin,
+    type = double, default = 5, min = 0, max = 100,
+    page = vTrait, translation = vTrait_RecoverRate,
 }
-option vTrait.RecoverRateMax 
-{
-    type = double, default = 0.01, min = 0, max = 1,
-    page = vTrait, translation = vTrait_RecoverRateMax,
-}
+
 option vTrait.HealthRecoveryRate 
 {
-    type = double, default = 0.004, min = 0, max = 1,
+    type = double, default = 10, min = 0, max = 100,
     page = vTrait, translation = vTrait_HealthRecoveryRate,
 }
 
-option vTrait.HitRecoverChance 
-{
-    type = double, default = 25, min = 0, max = 100,
-    page = vTrait, translation = vTrait_HitRecoverChance,
-}
-option vTrait.HitRecoveryPercent 
-{
-    type = double, default = 30, min = 0, max = 100,
-    page = vTrait, translation = vTrait_HitRecoveryPercent,
-}
-option vTrait.HPRestoreAmount 
-{
-    type = double, default = 10, min = 0, max = 100,
-    page = vTrait, translation = vTrait_HPRestoreAmount,
-}
 
-option vTrait.InjuryHealChance
-{
-    type = double, default = 50, min = 0, max = 100,
-    page = vTrait, translation = vTrait_InjuryHealChance,
-}
 option vTrait.InjuryHealOverheadMessage 
 {
     type = boolean, default = false,

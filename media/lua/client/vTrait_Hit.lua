@@ -25,26 +25,14 @@
 
 vTrait = vTrait or {}
 
-function vTrait.getHitRecoveryPercent(dmg)
-    local dmgPercent = SandboxVars.vTrait.HitRecoveryPercent or 30
-    local factor = dmgPercent / 100           
-    local HPRestoreAmount = SandboxVars.vTrait.HPRestoreAmount or 0
-
-    local maxValue = (math.floor(dmg * factor) + HPRestoreAmount + 1) / 100
-    local roll = ZombRandFloat(0.0, maxValue)
-
-    return roll
-end
-
 
 
 function vTrait.defense(pl, dmgType, dmg)
 	pl = pl or getPlayer()
-	if pl and pl:HasTrait("V")   then
-		local chance = SandboxVars.vTrait.HitRecoverChance or 25
-		if vTrait.doRoll(chance) then		
-		
-			local recov = vTrait.getHitRecoveryPercent(dmg) 
+	if pl and pl:HasTrait("V") then	
+		if dmgType == "WEAPONHIT" then
+			local HealthRecoveryRate = SandboxVars.vTrait.HealthRecoveryRate
+			local recov = math.min(dmg, HealthRecoveryRate)
 			pl:getBodyDamage():AddGeneralHealth(recov)
 			if SandboxVars.vTrait.InjuryHealOverheadMessage  then
 				HaloTextHelper.addTextWithArrow(pl, "Recovered: "..tostring((recov* 100)/100), true, HaloTextHelper.getColorGreen())

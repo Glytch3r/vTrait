@@ -19,41 +19,7 @@
 vTrait = vTrait or {}
 
 ------▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬------
-
-
-
-function vTrait.hasAnyInjury(pl)
-    pl = pl or getPlayer()
-    local bodyParts = pl:getBodyDamage():getBodyParts()
-    for i = 0, bodyParts:size() - 1 do
-        local bp = bodyParts:get(i)
-        if bp:HasInjury()
-            or bp:isDeepWounded() 
-            or bp:bitten()
-            or bp:bleeding()
-            or bp:isInfectedWound()
-            or bp:getFractureTime() > 0
-            or bp:getBurnTime() > 0
-            or bp:haveBullet()
-            or bp:haveGlass()
-            or bp:isCut()
-            or bp:bandaged()
-            or bp:stitched()
-            or bp:getSplintFactor() > 0
-            or bp:getAdditionalPain() > 10
-            or bp:getStiffness() > 5 then
-            return true
-        end
-    end
-    return false
-end
-
-function vTrait.doRoll(percent)
-    if percent <= 0 then return false end
-    if percent >= 100 then return true end
-    return percent >= ZombRand(1, 101)
-end
-
+--[[ 
 function vTrait.collectHealable(pl)
     local healable = {}
     local bodyParts = pl:getBodyDamage():getBodyParts()
@@ -74,7 +40,7 @@ function vTrait.collectHealable(pl)
                 p:setCutTime(0)
             end })
         end
-
+    
         if part:isDeepWounded() and part:getDeepWoundTime() > 0 then
             table.insert(healable, { part = part, label = "DeepWounded", func = function(p)
                 p:setDeepWoundTime(0)
@@ -146,46 +112,69 @@ function vTrait.collectHealable(pl)
     return healable
 end
 
-function vTrait.HealRandPart()
-    local pl = getPlayer()
-    if not pl or not pl:HasTrait("V") then return end
-    local healAmount = SandboxVars.vTrait.HPRestoreAmount or 1 
-
-    local bd = pl:getBodyDamage()
-	if pl:getMoodles():getMoodleLevel(MoodleType.Pain) > 3 then
-        bd:AddGeneralHealth(healAmount*2)        
-    end
-    while vTrait.doRoll(SandboxVars.vTrait.InjuryHealChance) do
-        local healable = vTrait.collectHealable(pl)
-
-        if #healable > 0 then
+function vTrait.HrHeal()
+    local pl = getPlayer(); if not pl then return end 
+    local healable = vTrait.collectHealable(pl)
+    if vTrait.hasAnyInjury(pl) then
+        if #healable > 0 then    
             local injury = healable[ZombRand(#healable) + 1]
             injury.func(injury.part)
-
-            if SandboxVars.vTrait.InjuryHealOverheadMessage == true then
-                local msg = string.format("[vTrait] Healed %s on %s", injury.label, tostring(injury.part:getType()))
-                pl:addLineChatElement(msg)
+            if SandboxVars.vTrait.InjuryHealOverheadMessage  then
+                local msg = string.format("Healed %s on %s", injury.label, tostring(injury.part:getType()))
+                HaloTextHelper.addTextWithArrow(pl, (tostring(msg)), true, HaloTextHelper.getColorGreen())
             end
-        else
-            local currentHp = bd:getOverallBodyHealth()
-            local healAmount = SandboxVars.vTrait.HPRestoreAmount or 1 
-            --bd:setOverallBodyHealth(math.min(100, currentHp + healAmount))
-
-            bd:AddGeneralHealth(healAmount)
-
-            if SandboxVars.vTrait.InjuryHealOverheadMessage == true then
-                pl:addLineChatElement("[vTrait] Restored Health +" .. tostring(healAmount))
-            end
-        end
-
-        if not vTrait.hasAnyInjury(pl) and pl:getBodyDamage():getOverallBodyHealth() >= 100 then
-            break
         end
     end
-
-    return true
 end
+Events.EveryHours.Add(vTrait.HrHeal)
+ ]]
+--[[ 
+local ticks = 0
+function vTrait.HealRandPart()
+    ticks = ticks + 1
+    if ticks % 3 == 0 then
+        ticks = 0
+        local pl = getPlayer()
+        if not pl or not pl:HasTrait("V") then return end
+        local healAmount = SandboxVars.vTrait.HealthRecoveryRate or 1 
+        local bd = pl:getBodyDamage()
+        if pl:getMoodles():getMoodleLevel(MoodleType.Pain) > 1 then
+            bd:AddGeneralHealth(healAmount*2)        
+        end
 
-Events.EveryOneMinute.Add(vTrait.HealRandPart)
+        while vTrait.doRoll(SandboxVars.vTrait.InjuryHealChance) do
+            local healable = vTrait.collectHealable(pl)
+
+            if #healable > 0 then
+                local injury = healable[ZombRand(#healable) + 1]
+                injury.func(injury.part)
+                
+                if SandboxVars.vTrait.InjuryHealOverheadMessage == true then
+                    local msg = string.format("[vTrait] Healed %s on %s", injury.label, tostring(injury.part:getType()))
+                    pl:addLineChatElement(msg)
+                end
+            else
+                local currentHp = bd:getOverallBodyHealth()
+                local healAmount = SandboxVars.vTrait.HealthRecoveryRate or 1 
+                --bd:setOverallBodyHealth(math.min(100, currentHp + healAmount))
+
+                bd:AddGeneralHealth(healAmount)
+
+                if SandboxVars.vTrait.InjuryHealOverheadMessage == true then
+                    pl:addLineChatElement("[vTrait] Restored Health +" .. tostring(healAmount))
+                end
+            end
+
+            if not vTrait.hasAnyInjury(pl) and pl:getBodyDamage():getOverallBodyHealth() >= 100 then
+                break
+            end
+        end
+
+    end
+end
+ ]]
+--Events.OnPlayerUpdate.Add(vTrait.HealRandPart)
+
+--Events.EveryOneMinute.Add(vTrait.HealRandPart)
 --Events.EveryTenMinutes.Add(vTrait.HealRandPart)
 

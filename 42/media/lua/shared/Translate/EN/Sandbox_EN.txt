@@ -39,32 +39,13 @@ Sandbox_EN = {
     Sandbox_vTrait_isHealHungerBonus = "Hunger Healing Bonus",
     Sandbox_vTrait_isHealHungerBonus_tooltip = "If enabled hunger increases healing rate instead of reducing it.",
 
-    Sandbox_vTrait_RecoverRateMin = "Minimum Injury Recovery Rate",
-    Sandbox_vTrait_RecoverRateMin_tooltip = "The minimum amount of injury recovery applied.",
+    Sandbox_vTrait_RecoverRate = "Injury Recovery Rate",
+    Sandbox_vTrait_RecoverRate_tooltip = "The amount of injury recovery applied.",
 
-    Sandbox_vTrait_RecoverRateMax = "Maximum Injury Recovery Rate",
-    Sandbox_vTrait_RecoverRateMax_tooltip = "The maximum amount of injury recovery applied.",
-
+  
     Sandbox_vTrait_HealthRecoveryRate = "Health Recovery Rate",
     Sandbox_vTrait_HealthRecoveryRate_tooltip = "The amount of general health recovery applied.",
 
-
-    Sandbox_vTrait_HealthRecoveryRate = "Health Recovery Rate",
-    Sandbox_vTrait_HealthRecoveryRate_tooltip = "The amount of general health recovery applied.",
-
-    Sandbox_vTrait_HPRestoreAmount = "Health Restore Amount",
-    Sandbox_vTrait_HPRestoreAmount_tooltip = "The amount of general health recovered if there are no injuries.",
-
-
-    Sandbox_vTrait_InjuryHealChance = "Injury Heal Chance",
-    Sandbox_vTrait_InjuryHealChance_tooltip = "Chance to trigger a heal every 10 mins.",
-
-
-    Sandbox_vTrait_HitRecoverChance = "Health Recovery Chance",
-    Sandbox_vTrait_HitRecoverChance_tooltip = "Percent chance to trigger Hit Recovery.",
-
-    Sandbox_vTrait_HitRecoveryPercent = "Hit Recover Percent",
-    Sandbox_vTrait_HitRecoveryPercent_tooltip = "The amount of damage recovered after getting hit.",
 
     Sandbox_vTrait_InjuryHealOverheadMessage = "Injury Heal Overhead Message",
     Sandbox_vTrait_InjuryHealOverheadMessage_tooltip = "Displays a floating text above the player while healing injuries",
